@@ -1,0 +1,69 @@
+# Dependencies
+node_modules/
+**/node_modules/
+
+# Environment variables
+.env
+.env.*
+**/.env
+**/.env.*
+!.env.example
+!**/.env.example
+
+# Build outputs & caches
+dist/
+**/dist/
+build/
+**/build/
+uploads/
+**/uploads/
+*.log
+**/*.log
+
+# Android & Gradle
+.gradle/
+**/.gradle/
+local.properties
+**/local.properties
+.cxx/
+**/.cxx/
+*.keystore
+**/*.keystore
+!debug.keystore
+!**/debug.keystore
+*.apk
+**/*.apk
+*.aab
+**/*.aab
+
+# iOS & Xcode
+.bundle/
+**/.bundle/
+Pods/
+**/Pods/
+DerivedData/
+**/DerivedData/
+*.xcuserstate
+**/*.xcuserstate
+*.xccheckout
+**/*.xccheckout
+*.ipa
+**/*.ipa
+.xcode.env.local
+**/.xcode.env.local
+*.jsbundle
+**/*.jsbundle
+
+# IDEs & System
+.idea/
+**/.idea/
+.vscode/
+**/.vscode/
+*.iml
+**/*.iml
+*.hprof
+**/*.hprof
+.DS_Store
+**/.DS_Store
+Thumbs.db
+dummy.txt

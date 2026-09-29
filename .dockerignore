@@ -1,0 +1,11 @@
+.git
+.gitignore
+README.md
+BlockChainWallet
+Police
+frontend
+**/node_modules
+**/dist
+**/uploads
+**/.env
+**/.env.*

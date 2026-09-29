@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const API_BASE_URL = 'http://localhost:5000/api/v1';
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://blockchain-document-wallet-32237917665.asia-south2.run.app/api/v1';
 
 export const api = axios.create({
   baseURL: API_BASE_URL,

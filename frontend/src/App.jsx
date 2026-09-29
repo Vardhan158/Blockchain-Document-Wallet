@@ -62,7 +62,7 @@ export function App() {
 
   return (
     <BrowserRouter>
-      <div className="flex min-h-screen bg-slate-900 text-slate-100 font-sans antialiased">
+      <div className="flex flex-col lg:flex-row min-h-screen bg-slate-900 text-slate-100 font-sans antialiased">
         <Sidebar />
 
         <div className="flex-1 flex flex-col min-w-0 min-h-screen bg-slate-900">
@@ -72,7 +72,7 @@ export function App() {
               element={
                 <>
                   <Header title="Dashboard Overview" />
-                  <div className="flex-1 p-8 max-w-7xl mx-auto w-full space-y-6">
+                  <div className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full space-y-6">
                     <AdminOverview />
                   </div>
                 </>
@@ -84,7 +84,7 @@ export function App() {
               element={
                 <>
                   <Header title="Citizen Document Verification Queue (Pipeline 1)" />
-                  <div className="flex-1 p-8 max-w-7xl mx-auto w-full space-y-6">
+                  <div className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full space-y-6">
                     <DocumentVerificationQueue />
                   </div>
                 </>
@@ -96,7 +96,7 @@ export function App() {
               element={
                 <>
                   <Header title="Police Officer Verification Queue (Pipeline 2)" />
-                  <div className="flex-1 p-8 max-w-7xl mx-auto w-full space-y-6">
+                  <div className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full space-y-6">
                     <PoliceOfficerVerificationQueue />
                   </div>
                 </>
@@ -108,7 +108,7 @@ export function App() {
               element={
                 <>
                   <Header title="Citizen User Accounts & Identity Registry" />
-                  <div className="flex-1 p-8 max-w-7xl mx-auto w-full space-y-6">
+                  <div className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full space-y-6">
                     <UserManagementPage />
                   </div>
                 </>
@@ -120,7 +120,7 @@ export function App() {
               element={
                 <>
                   <Header title="On-Chain Smart Contract Ledger Explorer" />
-                  <div className="flex-1 p-8 max-w-7xl mx-auto w-full space-y-6">
+                  <div className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full space-y-6">
                     <BlockchainLedgerPage />
                   </div>
                 </>
@@ -132,7 +132,7 @@ export function App() {
               element={
                 <>
                   <Header title="Immutable System Audit Logs (Section 55)" />
-                  <div className="flex-1 p-8 max-w-7xl mx-auto w-full space-y-6">
+                  <div className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full space-y-6">
                     <AuditLogsPage />
                   </div>
                 </>
@@ -144,7 +144,7 @@ export function App() {
               element={
                 <>
                   <Header title="Alerts & Push Notifications" />
-                  <div className="flex-1 p-8 max-w-7xl mx-auto w-full space-y-6">
+                  <div className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full space-y-6">
                     <NotificationsPage />
                   </div>
                 </>
@@ -156,7 +156,7 @@ export function App() {
               element={
                 <>
                   <Header title="Security Policy & Inactivity Controls" />
-                  <div className="flex-1 p-8 max-w-7xl mx-auto w-full space-y-6">
+                  <div className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full space-y-6">
                     <div className="bg-slate-800 rounded-2xl border border-slate-700 p-6 space-y-3">
                       <h2 className="text-base font-extrabold text-white">Security & Session Policy</h2>
                       <p className="text-xs text-slate-300 leading-relaxed">
@@ -173,7 +173,7 @@ export function App() {
               element={
                 <>
                   <Header title="System Settings & Document Types Governance" />
-                  <div className="flex-1 p-8 max-w-7xl mx-auto w-full space-y-6">
+                  <div className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full space-y-6">
                     <SystemSettingsPage />
                   </div>
                 </>
@@ -185,7 +185,7 @@ export function App() {
               element={
                 <>
                   <Header title="Administrator Profile & Security Settings" />
-                  <div className="flex-1 p-8 max-w-7xl mx-auto w-full space-y-6">
+                  <div className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full space-y-6">
                     <AdminProfilePage onLogout={() => {
                       sessionStorage.clear();
                       localStorage.clear();

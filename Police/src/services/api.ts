@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { tokenStorage } from './tokenStorage';
-
-export const API_BASE_URL = 'http://10.0.2.2:5000/api/v1';
+// Default base URL configured for Cloud Run deployment
+export const API_BASE_URL = 'https://blockchain-document-wallet-32237917665.asia-south2.run.app/api/v1';
 
 export const api = axios.create({
   baseURL: API_BASE_URL,

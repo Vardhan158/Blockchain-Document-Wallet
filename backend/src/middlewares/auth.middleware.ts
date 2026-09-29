@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 import { validateAdminSession } from '../services/admin-session.service';
 import { UserModel } from '../models/user.model';
+import { dbService } from '../services/db.service';
 
 export const JWT_SECRET = process.env.JWT_SECRET || 'blockchain_wallet_secret_key_2026';
 
@@ -85,8 +86,15 @@ export const requireActiveAdmin = async (req: AuthRequest, res: Response, next: 
   }
 
   try {
-    const adminEmail = req.user?.email || 'admin@vault.gov.in';
-    const adminUser = await UserModel.findOne({ email: adminEmail.toLowerCase() }).lean();
+    const adminEmail = req.user?.email || process.env.ADMIN_EMAIL || 'admin@vault.gov.in';
+    let adminUser = await UserModel.findOne({ email: adminEmail.toLowerCase() }).lean();
+
+    if (!adminUser) {
+      const memUser = await dbService.getUserByEmail(adminEmail);
+      if (memUser && memUser.role === 'ADMIN') {
+        adminUser = memUser as any;
+      }
+    }
 
     if (adminUser && adminUser.accountStatus !== 'ACTIVE') {
       return res.status(403).json({

@@ -811,6 +811,9 @@ export const adminLogin = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Admin ID / Email and password are required.' });
     }
 
+    const envAdminEmail = (process.env.ADMIN_EMAIL || 'admin@vault.gov.in').trim().toLowerCase();
+    const envAdminId = (process.env.ADMIN_ID || process.env.ADMIN_USER_ID || 'ADMIN-001').trim().toUpperCase();
+
     let adminUser = await UserModel.findOne({
       $or: [
         { email: identifier },
@@ -818,21 +821,43 @@ export const adminLogin = async (req: Request, res: Response) => {
       ],
     });
 
+    if (!adminUser) {
+      const memUser = (await dbService.getUserByEmail(identifier)) || (await dbService.getUserByPublicId(identifier.toUpperCase()));
+      if (memUser && memUser.role === 'ADMIN') {
+        adminUser = memUser as any;
+      }
+    }
+
     // Seed fallback if missing
-    if (!adminUser && (identifier === 'admin@vault.gov.in' || identifier === 'admin-001')) {
-      const passwordHash = await bcrypt.hash('admin123', 10);
-      adminUser = await UserModel.create({
+    if (!adminUser && (identifier === envAdminEmail || identifier === envAdminId.toLowerCase() || identifier === 'admin@vault.gov.in' || identifier === 'admin-001')) {
+      const envAdminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+      const envAdminName = process.env.ADMIN_NAME || process.env.ADMIN_FULL_NAME || 'System Admin Supervisor';
+      const envAdminPhone = process.env.ADMIN_PHONE || '1800112026';
+      const passwordHash = await bcrypt.hash(envAdminPassword, 10);
+      const adminData = {
         id: 'admin_001',
-        userId: 'ADMIN-001',
-        fullName: 'System Admin Supervisor',
-        email: 'admin@vault.gov.in',
-        phone: '1800112026',
+        userId: envAdminId,
+        fullName: envAdminName,
+        email: envAdminEmail,
+        phone: envAdminPhone,
         passwordHash,
         isVerified: true,
-        accountStatus: 'ACTIVE',
-        role: 'ADMIN',
+        phoneVerified: true,
+        accountStatus: 'ACTIVE' as const,
+        role: 'ADMIN' as const,
+        failedLoginAttempts: 0,
+        lockoutUntil: '',
         createdAt: new Date().toISOString(),
-      });
+      };
+      try {
+        adminUser = await UserModel.create(adminData);
+      } catch (e) {
+        // Fallback if Mongo is unavailable
+      }
+      await dbService.createUser(adminData as any);
+      if (!adminUser) {
+        adminUser = adminData as any;
+      }
     }
 
     if (!adminUser) {
@@ -870,6 +895,12 @@ export const adminLogin = async (req: Request, res: Response) => {
     // Reset failed login attempts on success
     adminUser.failedLoginAttempts = 0;
     adminUser.lockoutUntil = undefined;
+    if (typeof (adminUser as any).save === 'function') {
+      try {
+        await (adminUser as any).save();
+      } catch (e) {}
+    }
+    await dbService.saveUser(adminUser as any);
 
     // SECTION 10: STRICT ACCOUNT STATUS CHECK (MUST BE ACTIVE)
     const status = adminUser.accountStatus || 'ACTIVE';

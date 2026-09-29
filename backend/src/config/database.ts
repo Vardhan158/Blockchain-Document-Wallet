@@ -1,34 +1,87 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcryptjs';
+import dotenv from 'dotenv';
 import { UserModel } from '../models/user.model';
+import { dbService } from '../services/db.service';
+
+dotenv.config();
 
 /**
  * SECTION 7: SYSTEM INITIALIZATION ADMIN SEEDER (ADMIN-001)
- * Admins CANNOT self-register. The initial admin is seeded into the database.
+ * Admins CANNOT self-register. The initial admin is seeded into the database from .env on startup.
  */
 export const seedInitialAdmin = async (): Promise<void> => {
   try {
-    const adminEmail = 'admin@vault.gov.in';
-    const existing = await UserModel.findOne({ email: adminEmail });
+    const adminEmail = (process.env.ADMIN_EMAIL || 'admin@vault.gov.in').trim().toLowerCase();
+    const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+    const adminId = (process.env.ADMIN_ID || process.env.ADMIN_USER_ID || 'ADMIN-001').trim().toUpperCase();
+    const adminName = process.env.ADMIN_NAME || process.env.ADMIN_FULL_NAME || 'System Admin Supervisor';
+    const adminPhone = process.env.ADMIN_PHONE || '1800112026';
 
-    if (!existing) {
-      const passwordHash = await bcrypt.hash('admin123', 10);
-      await UserModel.create({
-        id: 'admin_001',
-        userId: 'ADMIN-001',
-        fullName: 'System Admin Supervisor',
-        email: adminEmail,
-        phone: '1800112026',
-        passwordHash,
-        isVerified: true,
-        accountStatus: 'ACTIVE',
-        role: 'ADMIN',
-        createdAt: new Date().toISOString(),
+    const passwordHash = await bcrypt.hash(adminPassword, 10);
+    const isMongoConnected = mongoose.connection.readyState === 1;
+
+    let existingAdmin: any = null;
+
+    if (isMongoConnected) {
+      existingAdmin = await UserModel.findOne({
+        $or: [{ email: adminEmail }, { userId: adminId }],
       });
-      console.log(`👑 [ADMIN SEEDER] Seeded initial administrator account: ADMIN-001 (${adminEmail})`);
+
+      if (existingAdmin) {
+        existingAdmin.userId = adminId;
+        existingAdmin.fullName = adminName;
+        existingAdmin.email = adminEmail;
+        existingAdmin.phone = adminPhone;
+        existingAdmin.passwordHash = passwordHash;
+        existingAdmin.isVerified = true;
+        existingAdmin.phoneVerified = true;
+        existingAdmin.accountStatus = 'ACTIVE';
+        existingAdmin.role = 'ADMIN';
+        existingAdmin.failedLoginAttempts = 0;
+        existingAdmin.lockoutUntil = '';
+        await existingAdmin.save();
+        console.log(`👑 [ADMIN SEEDER] Synchronized & updated administrator account: ${adminId} (${adminEmail})`);
+      } else {
+        existingAdmin = await UserModel.create({
+          id: 'admin_001',
+          userId: adminId,
+          fullName: adminName,
+          email: adminEmail,
+          phone: adminPhone,
+          passwordHash,
+          isVerified: true,
+          phoneVerified: true,
+          accountStatus: 'ACTIVE' as const,
+          role: 'ADMIN' as const,
+          failedLoginAttempts: 0,
+          lockoutUntil: '',
+          createdAt: new Date().toISOString(),
+        });
+        console.log(`👑 [ADMIN SEEDER] Seeded initial administrator account: ${adminId} (${adminEmail})`);
+      }
+    }
+
+    // Always seed/sync to dbService (in-memory store fallback)
+    await dbService.createUser({
+      id: existingAdmin?.id || 'admin_001',
+      userId: adminId,
+      fullName: adminName,
+      email: adminEmail,
+      phone: adminPhone,
+      passwordHash,
+      isVerified: true,
+      phoneVerified: true,
+      accountStatus: 'ACTIVE' as const,
+      role: 'ADMIN' as const,
+      createdAt: existingAdmin?.createdAt || new Date().toISOString(),
+    });
+
+    if (!isMongoConnected) {
+      console.log(`👑 [ADMIN SEEDER] Seeded administrator account in memory: ${adminId} (${adminEmail})`);
     }
   } catch (err: any) {
-    console.warn('Admin seeder error:', err.message);
+    console.warn('⚠️ [ADMIN SEEDER] Admin seeder warning:', err.message);
   }
 };
 
@@ -45,5 +98,6 @@ export const connectDatabase = async (): Promise<void> => {
   } catch (error: any) {
     console.warn(`⚠️ Could not connect to MongoDB at ${mongoUri}: ${error.message}`);
     console.warn('ℹ️ Falling back to in-memory store for local testing.');
+    await seedInitialAdmin();
   }
 };

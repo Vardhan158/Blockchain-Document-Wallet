@@ -3,8 +3,10 @@ import cors from 'cors';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
+import bcrypt from 'bcryptjs';
 import apiRoutes from './routes/api.routes';
 import { connectDatabase } from './config/database';
+import { UserModel } from './models/user.model';
 
 dotenv.config();
 
@@ -71,8 +73,40 @@ app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on port ${PORT}`);
 });
 
-connectDatabase().then(() => {
+async function seedAdmin() {
+  const adminEmail = process.env.ADMIN_EMAIL || 'admin@vault.gov.in';
+  const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+  const adminId = process.env.ADMIN_ID || 'ADMIN-001';
+
+  try {
+    const existingAdmin = await UserModel.findOne({ email: adminEmail });
+    if (!existingAdmin) {
+      const passwordHash = await bcrypt.hash(adminPassword, 12);
+      await UserModel.create({
+        id: `admin_${Date.now()}`,
+        userId: adminId,
+        fullName: process.env.ADMIN_NAME || 'System Admin Supervisor',
+        email: adminEmail,
+        phone: process.env.ADMIN_PHONE || '1800112026',
+        passwordHash,
+        isVerified: true,
+        phoneVerified: true,
+        accountStatus: 'ACTIVE',
+        role: 'ADMIN',
+        createdAt: new Date().toISOString(),
+      });
+      console.log(`[SEED] Admin account seeded: ${adminEmail}`);
+    } else {
+      console.log(`[SEED] Admin account already exists: ${adminEmail}`);
+    }
+  } catch (error) {
+    console.error('[SEED] Failed to seed admin:', error);
+  }
+}
+
+connectDatabase().then(async () => {
   console.log('MongoDB connected');
+  await seedAdmin();
 }).catch((error) => {
   console.error('MongoDB connection failed:', error);
 });

@@ -125,21 +125,21 @@ export const UserManagementPage = () => {
 
   return (
     <div className="space-y-4 sm:space-y-5">
-      <div className="bg-slate-800 rounded-2xl border border-slate-700 p-4 sm:p-5">
+      <div className="bg-white shadow-sm rounded-2xl border border-[#e0e5f4] p-4 sm:p-5">
         {/* Header with Search */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-700 mb-4 gap-3">
-          <h3 className="text-sm sm:text-base font-extrabold text-white flex items-center gap-2">
-            <Users className="text-sky-400 flex-shrink-0" size={20} />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#e0e5f4] mb-4 gap-3">
+          <h3 className="text-sm sm:text-base font-extrabold text-[#090a23] flex items-center gap-2">
+            <Users className="text-[#009df2] flex-shrink-0" size={20} />
             <span>Citizen Identity Registry (Section 44)</span>
           </h3>
 
           {/* SECTION 45: SEARCH INPUT ACROSS USER ID, NAME, EMAIL, PHONE */}
-          <div className="flex items-center gap-2 bg-slate-900 px-3.5 py-2 rounded-xl border border-slate-700 w-full sm:w-auto focus-within:border-indigo-500 transition-colors">
-            <Search size={15} className="text-slate-400 flex-shrink-0" />
+          <div className="flex items-center gap-2 bg-white px-3.5 py-2 rounded-xl border border-[#e0e5f4] w-full sm:w-auto focus-within:border-[#6442ff] transition-colors">
+            <Search size={15} className="text-[#596383] flex-shrink-0" />
             <input
               type="text"
               placeholder="Search User ID, Name, Email, Phone..."
-              className="bg-transparent text-white text-xs outline-none w-full sm:w-72 placeholder:text-slate-600"
+              className="bg-transparent text-[#090a23] text-xs outline-none w-full sm:w-72 placeholder:text-[#7b819b]"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -149,17 +149,17 @@ export const UserManagementPage = () => {
         {/* MOBILE CARDS VIEW (md:hidden) */}
         <div className="md:hidden space-y-3">
           {filteredUsers.length === 0 ? (
-            <div className="p-8 text-center text-slate-400 text-xs bg-slate-900/50 rounded-xl border border-slate-800">
+            <div className="p-8 text-center text-[#596383] text-xs bg-white/50 rounded-xl border border-[#edf0fb]">
               No citizen user accounts found matching "{searchTerm}".
             </div>
           ) : (
             filteredUsers.map((u) => (
               <div
                 key={u.id}
-                className="bg-slate-900 p-3.5 rounded-xl border border-slate-800 space-y-2.5 text-xs shadow-sm">
+                className="bg-white p-3.5 rounded-xl border border-[#edf0fb] space-y-2.5 text-xs shadow-sm">
                 <div className="flex items-center justify-between gap-2">
                   <div>
-                    <strong className="text-white text-xs block truncate">{u.fullName}</strong>
+                    <strong className="text-[#090a23] text-xs block truncate">{u.fullName}</strong>
                     <span className="font-mono text-indigo-300 text-[11px] font-bold block">{u.userId}</span>
                   </div>
                   <span
@@ -172,27 +172,27 @@ export const UserManagementPage = () => {
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 text-[11px] pt-1 border-t border-slate-800">
+                <div className="grid grid-cols-2 gap-2 text-[11px] pt-1 border-t border-[#edf0fb]">
                   <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">Email</span>
-                    <span className="text-slate-300 truncate block">{u.email}</span>
+                    <span className="text-[#7b819b] block text-[10px] uppercase font-bold">Email</span>
+                    <span className="text-[#424a6b] truncate block">{u.email}</span>
                   </div>
                   <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">Phone</span>
-                    <span className="font-mono text-slate-300 truncate block">{u.phone}</span>
+                    <span className="text-[#7b819b] block text-[10px] uppercase font-bold">Phone</span>
+                    <span className="font-mono text-[#424a6b] truncate block">{u.phone}</span>
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between text-[11px] text-slate-400 pt-1 border-t border-slate-800/80">
-                  <span className="font-bold text-amber-400">{u.docCount} Documents</span>
+                <div className="flex items-center justify-between text-[11px] text-[#596383] pt-1 border-t border-[#edf0fb]/80">
+                  <span className="font-bold text-[#bd8100]">{u.docCount} Documents</span>
                   <span>Registered: {u.createdAt}</span>
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex gap-2 pt-1 border-t border-slate-800">
+                <div className="flex gap-2 pt-1 border-t border-[#edf0fb]">
                   <button
                     type="button"
-                    className="flex-1 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-bold rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                    className="flex-1 py-1.5 bg-[#f4f7fc] hover:bg-[#dceaff] text-[#171438] text-xs font-bold rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer"
                     onClick={() => {
                       setSelectedDocUser(u);
                       setShowDetailsModal(true);
@@ -231,7 +231,7 @@ export const UserManagementPage = () => {
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="border-b border-slate-700 text-[11px] font-black text-slate-400 uppercase tracking-wider">
+              <tr className="border-b border-[#e0e5f4] text-[11px] font-black text-[#596383] uppercase tracking-wider">
                 <th className="p-3">User ID</th>
                 <th className="p-3">Name</th>
                 <th className="p-3">Email</th>
@@ -242,22 +242,22 @@ export const UserManagementPage = () => {
                 <th className="p-3">Management Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800">
+            <tbody className="divide-y divide-[#edf0fb]">
               {filteredUsers.length === 0 ? (
                 <tr>
-                  <td colSpan="8" className="text-center p-10 text-slate-400">
+                  <td colSpan="8" className="text-center p-10 text-[#596383]">
                     No citizen user accounts found matching "{searchTerm}".
                   </td>
                 </tr>
               ) : (
                 filteredUsers.map((u) => (
-                  <tr key={u.id} className="hover:bg-slate-700/30 transition-colors">
+                  <tr key={u.id} className="hover:bg-[#f4f7fc]/30 transition-colors">
                     <td className="p-3 font-mono text-indigo-300 font-extrabold">{u.userId}</td>
                     <td className="p-3">
-                      <strong className="text-white">{u.fullName}</strong>
+                      <strong className="text-[#090a23]">{u.fullName}</strong>
                     </td>
-                    <td className="p-3 text-slate-300">{u.email}</td>
-                    <td className="p-3 text-slate-300 font-mono">{u.phone}</td>
+                    <td className="p-3 text-[#424a6b]">{u.email}</td>
+                    <td className="p-3 text-[#424a6b] font-mono">{u.phone}</td>
                     <td className="p-3">
                       <span
                         className={`px-2.5 py-1 rounded-full text-[10px] font-black border ${
@@ -268,13 +268,13 @@ export const UserManagementPage = () => {
                         {u.accountStatus}
                       </span>
                     </td>
-                    <td className="p-3 font-bold text-amber-400">{u.docCount} Documents</td>
-                    <td className="p-3 text-slate-400">{u.createdAt}</td>
+                    <td className="p-3 font-bold text-[#bd8100]">{u.docCount} Documents</td>
+                    <td className="p-3 text-[#596383]">{u.createdAt}</td>
                     <td className="p-3">
                       <div className="flex gap-1.5 flex-wrap">
                         <button
                           type="button"
-                          className="px-2.5 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-200 text-[11px] font-bold rounded-md flex items-center gap-1 cursor-pointer transition-colors"
+                          className="px-2.5 py-1.5 bg-[#f4f7fc] hover:bg-[#dceaff] text-[#171438] text-[11px] font-bold rounded-md flex items-center gap-1 cursor-pointer transition-colors"
                           onClick={() => {
                             setSelectedDocUser(u);
                             setShowDetailsModal(true);
@@ -315,60 +315,60 @@ export const UserManagementPage = () => {
       {/* SECTION 46: USER DETAILS MODAL SCREEN */}
       {showDetailsModal && selectedUser && (
         <div className="fixed inset-0 bg-black/85 flex items-center justify-center p-3 sm:p-5 z-50 overflow-y-auto">
-          <div className="bg-slate-800 rounded-2xl border border-slate-700 w-full max-w-2xl max-h-[90vh] overflow-y-auto p-4 sm:p-6 shadow-2xl space-y-4 font-sans">
-            <div className="flex justify-between items-center pb-2 border-b border-slate-700">
-              <h3 className="text-sm sm:text-base font-extrabold text-white flex items-center gap-2">
-                <Users className="text-sky-400 flex-shrink-0" size={18} />
+          <div className="bg-white shadow-sm rounded-2xl border border-[#e0e5f4] w-full max-w-2xl max-h-[90vh] overflow-y-auto p-4 sm:p-6 shadow-2xl space-y-4 font-sans">
+            <div className="flex justify-between items-center pb-2 border-b border-[#e0e5f4]">
+              <h3 className="text-sm sm:text-base font-extrabold text-[#090a23] flex items-center gap-2">
+                <Users className="text-[#009df2] flex-shrink-0" size={18} />
                 <span className="truncate">
                   User Details: {selectedUser.fullName} ({selectedUser.userId})
                 </span>
               </h3>
               <button
                 type="button"
-                className="text-slate-400 hover:text-white text-lg p-1 cursor-pointer"
+                className="text-[#596383] hover:text-[#090a23] text-lg p-1 cursor-pointer"
                 onClick={() => setShowDetailsModal(false)}>
                 ✕
               </button>
             </div>
 
             {/* User Meta Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 bg-slate-900 p-3.5 sm:p-4 rounded-xl border border-slate-800 text-xs">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-3 bg-white p-3.5 sm:p-4 rounded-xl border border-[#edf0fb] text-xs">
               <div>
-                <span className="text-slate-400">User ID:</span>{' '}
+                <span className="text-[#596383]">User ID:</span>{' '}
                 <span className="font-mono text-indigo-300 font-extrabold ml-1">{selectedUser.userId}</span>
               </div>
               <div>
-                <span className="text-slate-400">Full Name:</span>{' '}
-                <span className="text-white font-bold ml-1">{selectedUser.fullName}</span>
+                <span className="text-[#596383]">Full Name:</span>{' '}
+                <span className="text-[#090a23] font-bold ml-1">{selectedUser.fullName}</span>
               </div>
               <div>
-                <span className="text-slate-400">Email:</span>{' '}
-                <span className="text-slate-200 ml-1 break-all">{selectedUser.email}</span>
+                <span className="text-[#596383]">Email:</span>{' '}
+                <span className="text-[#171438] ml-1 break-all">{selectedUser.email}</span>
               </div>
               <div>
-                <span className="text-slate-400">Phone:</span>{' '}
-                <span className="text-slate-200 font-mono ml-1">{selectedUser.phone}</span>
+                <span className="text-[#596383]">Phone:</span>{' '}
+                <span className="text-[#171438] font-mono ml-1">{selectedUser.phone}</span>
               </div>
               <div>
-                <span className="text-slate-400">Date of Birth:</span>{' '}
-                <span className="text-slate-200 ml-1">{selectedUser.dob}</span>
+                <span className="text-[#596383]">Date of Birth:</span>{' '}
+                <span className="text-[#171438] ml-1">{selectedUser.dob}</span>
               </div>
               <div>
-                <span className="text-slate-400">Account Status:</span>{' '}
-                <span className="text-emerald-400 font-bold ml-1">{selectedUser.accountStatus}</span>
+                <span className="text-[#596383]">Account Status:</span>{' '}
+                <span className="text-[#009963] font-bold ml-1">{selectedUser.accountStatus}</span>
               </div>
               <div>
-                <span className="text-slate-400">Registration Date:</span>{' '}
-                <span className="text-slate-200 ml-1">{selectedUser.createdAt}</span>
+                <span className="text-[#596383]">Registration Date:</span>{' '}
+                <span className="text-[#171438] ml-1">{selectedUser.createdAt}</span>
               </div>
               <div>
-                <span className="text-slate-400">Last Login:</span>{' '}
-                <span className="text-amber-400 font-bold ml-1">{selectedUser.lastLogin}</span>
+                <span className="text-[#596383]">Last Login:</span>{' '}
+                <span className="text-[#bd8100] font-bold ml-1">{selectedUser.lastLogin}</span>
               </div>
             </div>
 
             {/* SECTION 46 TAB NAVIGATION */}
-            <div className="flex gap-2 border-b border-slate-700 pb-2 overflow-x-auto">
+            <div className="flex gap-2 border-b border-[#e0e5f4] pb-2 overflow-x-auto">
               {[
                 { id: 'DOCUMENTS', label: 'Documents', icon: FileText },
                 { id: 'NOTIFICATIONS', label: 'Notifications', icon: Bell },
@@ -382,7 +382,7 @@ export const UserManagementPage = () => {
                     type="button"
                     onClick={() => setActiveTab(tab.id)}
                     className={`px-3 py-1.5 rounded-lg text-xs font-bold flex items-center gap-1.5 transition-colors whitespace-nowrap cursor-pointer ${
-                      activeTab === tab.id ? 'bg-indigo-600 text-white' : 'text-slate-400 hover:text-white'
+                      activeTab === tab.id ? 'bg-indigo-600 text-white' : 'text-[#596383] hover:text-[#090a23]'
                     }`}>
                     <IconComp size={14} /> {tab.label}
                   </button>
@@ -391,18 +391,18 @@ export const UserManagementPage = () => {
             </div>
 
             {/* Tab Contents */}
-            <div className="bg-slate-900 p-3.5 sm:p-4 rounded-xl border border-slate-800 min-h-[140px] text-xs space-y-2">
+            <div className="bg-white p-3.5 sm:p-4 rounded-xl border border-[#edf0fb] min-h-[140px] text-xs space-y-2">
               {activeTab === 'DOCUMENTS' && (
                 <div className="space-y-2">
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between p-2.5 bg-slate-950 rounded-lg gap-1">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between p-2.5 bg-[#fafbff] rounded-lg gap-1">
                     <span className="truncate">🚗 My Driving Licence (DRIVING_LICENSE)</span>
-                    <span className="text-emerald-400 font-bold text-[11px] self-start sm:self-auto">
+                    <span className="text-[#009963] font-bold text-[11px] self-start sm:self-auto">
                       APPROVED • VEHICLE
                     </span>
                   </div>
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between p-2.5 bg-slate-950 rounded-lg gap-1">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between p-2.5 bg-[#fafbff] rounded-lg gap-1">
                     <span className="truncate">💳 PAN Card (PAN)</span>
-                    <span className="text-indigo-400 font-bold text-[11px] self-start sm:self-auto">
+                    <span className="text-[#6442ff] font-bold text-[11px] self-start sm:self-auto">
                       APPROVED • NORMAL
                     </span>
                   </div>
@@ -410,26 +410,26 @@ export const UserManagementPage = () => {
               )}
 
               {activeTab === 'NOTIFICATIONS' && (
-                <p className="text-slate-400">
+                <p className="text-[#596383]">
                   In-app notifications sent to citizen regarding approvals & tag changes.
                 </p>
               )}
 
               {activeTab === 'AUDIT' && (
-                <p className="text-slate-400">
+                <p className="text-[#596383]">
                   Audit events recorded for citizen document uploads and police lookups.
                 </p>
               )}
 
               {activeTab === 'ACTIVITY' && (
-                <p className="text-slate-400">Last login from IP 10.0.2.15 (Enclave Authenticated).</p>
+                <p className="text-[#596383]">Last login from IP 10.0.2.15 (Enclave Authenticated).</p>
               )}
             </div>
 
             <div className="flex justify-end">
               <button
                 type="button"
-                className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-bold rounded-xl cursor-pointer"
+                className="px-4 py-2 bg-[#f4f7fc] hover:bg-[#dceaff] text-[#171438] text-xs font-bold rounded-xl cursor-pointer"
                 onClick={() => setShowDetailsModal(false)}>
                 Close Details
               </button>
@@ -441,35 +441,35 @@ export const UserManagementPage = () => {
       {/* SECTION 48: SUSPEND USER MODAL */}
       {showSuspendModal && selectedUser && (
         <div className="fixed inset-0 bg-black/85 flex items-center justify-center p-3 sm:p-5 z-50 overflow-y-auto">
-          <div className="bg-slate-800 rounded-2xl border border-red-700 w-full max-w-lg max-h-[90vh] overflow-y-auto p-4 sm:p-6 shadow-2xl space-y-4">
+          <div className="bg-white shadow-sm rounded-2xl border border-red-700 w-full max-w-lg max-h-[90vh] overflow-y-auto p-4 sm:p-6 shadow-2xl space-y-4">
             <div className="flex justify-between items-center pb-2 border-b border-red-800">
-              <h3 className="text-sm sm:text-base font-extrabold text-red-400 flex items-center gap-2">
-                <ShieldAlert className="text-red-500 flex-shrink-0" size={18} />
+              <h3 className="text-sm sm:text-base font-extrabold text-[#ef2547] flex items-center gap-2">
+                <ShieldAlert className="text-[#ef2547] flex-shrink-0" size={18} />
                 <span>Suspend Citizen Account?</span>
               </h3>
               <button
                 type="button"
-                className="text-slate-400 hover:text-white text-lg p-1 cursor-pointer"
+                className="text-[#596383] hover:text-[#090a23] text-lg p-1 cursor-pointer"
                 onClick={() => setShowSuspendModal(false)}>
                 ✕
               </button>
             </div>
 
-            <div className="bg-slate-900 rounded-xl p-3 text-xs space-y-1 border border-red-900/50">
-              <div className="text-slate-300">
-                Suspending Citizen: <strong className="text-white">{selectedUser.fullName}</strong>
+            <div className="bg-white rounded-xl p-3 text-xs space-y-1 border border-red-900/50">
+              <div className="text-[#424a6b]">
+                Suspending Citizen: <strong className="text-[#090a23]">{selectedUser.fullName}</strong>
               </div>
-              <div className="text-slate-400">
+              <div className="text-[#596383]">
                 Public User ID: <span className="text-indigo-300 font-mono">{selectedUser.userId}</span>
               </div>
             </div>
 
             <div>
-              <label className="block text-[10px] font-black text-red-400 uppercase tracking-wider mb-1.5">
+              <label className="block text-[10px] font-black text-[#ef2547] uppercase tracking-wider mb-1.5">
                 SELECT SUSPENSION REASON *
               </label>
               <select
-                className="w-full p-2.5 sm:p-3 bg-slate-900 border border-slate-700 rounded-xl text-white text-xs font-bold outline-none"
+                className="w-full p-2.5 sm:p-3 bg-white border border-[#e0e5f4] rounded-xl text-[#090a23] text-xs font-bold outline-none"
                 value={suspendReason}
                 onChange={(e) => setSuspendReason(e.target.value)}>
                 {SUSPENSION_REASONS.map((r) => (
@@ -482,12 +482,12 @@ export const UserManagementPage = () => {
 
             {suspendReason === 'Other' && (
               <div>
-                <label className="block text-[10px] font-black text-red-400 uppercase tracking-wider mb-1.5">
+                <label className="block text-[10px] font-black text-[#ef2547] uppercase tracking-wider mb-1.5">
                   CUSTOM SUSPENSION REASON *
                 </label>
                 <input
                   type="text"
-                  className="w-full p-2.5 sm:p-3 bg-slate-900 border border-slate-700 rounded-xl text-white text-xs outline-none focus:border-red-500"
+                  className="w-full p-2.5 sm:p-3 bg-white border border-[#e0e5f4] rounded-xl text-[#090a23] text-xs outline-none focus:border-[#ffd3dc]"
                   placeholder="Enter custom suspension reason..."
                   value={customSuspendReason}
                   onChange={(e) => setCustomSuspendReason(e.target.value)}
@@ -503,7 +503,7 @@ export const UserManagementPage = () => {
             <div className="flex flex-col sm:flex-row justify-end gap-2.5 pt-2">
               <button
                 type="button"
-                className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-bold rounded-xl cursor-pointer"
+                className="px-4 py-2 bg-[#f4f7fc] hover:bg-[#dceaff] text-[#171438] text-xs font-bold rounded-xl cursor-pointer"
                 onClick={() => setShowSuspendModal(false)}>
                 Cancel
               </button>

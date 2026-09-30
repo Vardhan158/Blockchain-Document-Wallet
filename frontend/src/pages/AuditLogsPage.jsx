@@ -136,16 +136,16 @@ export const AuditLogsPage = () => {
   return (
     <div className="space-y-4 sm:space-y-5">
       {/* SECTION 70: IMMUTABLE AUDIT PRINCIPLE BANNER */}
-      <div className="bg-slate-950 border border-slate-800 rounded-2xl p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="bg-[#fafbff] border border-[#edf0fb] rounded-2xl p-3.5 sm:p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div className="flex items-start sm:items-center gap-3 min-w-0">
-          <div className="p-2 sm:p-2.5 bg-red-500/10 border border-red-500/30 rounded-xl text-red-400 flex-shrink-0 mt-0.5 sm:mt-0">
+          <div className="p-2 sm:p-2.5 bg-[#fff0f2] border border-[#ffd3dc]/30 rounded-xl text-[#ef2547] flex-shrink-0 mt-0.5 sm:mt-0">
             <Lock size={18} />
           </div>
           <div className="min-w-0">
-            <h4 className="text-xs font-black text-white uppercase tracking-wider truncate">
+            <h4 className="text-xs font-black text-[#090a23] uppercase tracking-wider truncate">
               Section 70: Immutable Audit Principle Active
             </h4>
-            <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">
+            <p className="text-xs text-[#596383] mt-0.5 leading-relaxed">
               Audit records are strictly append-only. Admins may filter and export reports, but no delete or modification capability exists.
             </p>
           </div>
@@ -153,27 +153,27 @@ export const AuditLogsPage = () => {
 
         <button
           type="button"
-          className="w-full sm:w-auto px-4 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-extrabold rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-indigo-600/30 transition-all active:scale-[0.98] flex-shrink-0"
+          className="w-full sm:w-auto px-4 py-2.5 bg-[#6442ff] hover:bg-[#5231e3] text-white text-xs font-extrabold rounded-xl flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-indigo-600/30 transition-all active:scale-[0.98] flex-shrink-0"
           onClick={handleExportCSV}>
           <Download size={14} />
           <span>Export CSV</span>
         </button>
       </div>
 
-      <div className="bg-slate-800 rounded-2xl border border-slate-700 p-4 sm:p-5">
+      <div className="bg-white shadow-sm rounded-2xl border border-[#e0e5f4] p-4 sm:p-5">
         {/* Header & Search */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-700 mb-4 gap-3">
-          <h3 className="text-sm sm:text-base font-extrabold text-white flex items-center gap-2">
-            <ShieldAlert className="text-red-400 flex-shrink-0" size={20} />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#e0e5f4] mb-4 gap-3">
+          <h3 className="text-sm sm:text-base font-extrabold text-[#090a23] flex items-center gap-2">
+            <ShieldAlert className="text-[#ef2547] flex-shrink-0" size={20} />
             <span>Audit Logs Module (Section 68 & 69)</span>
           </h3>
 
-          <div className="flex items-center gap-2 bg-slate-900 px-3.5 py-2 rounded-xl border border-slate-700 w-full sm:w-auto focus-within:border-indigo-500 transition-colors">
-            <Search size={15} className="text-slate-400 flex-shrink-0" />
+          <div className="flex items-center gap-2 bg-white px-3.5 py-2 rounded-xl border border-[#e0e5f4] w-full sm:w-auto focus-within:border-[#6442ff] transition-colors">
+            <Search size={15} className="text-[#596383] flex-shrink-0" />
             <input
               type="text"
               placeholder="Search Actor, Action, Entity..."
-              className="bg-transparent text-white text-xs outline-none w-full sm:w-60"
+              className="bg-transparent text-[#090a23] text-xs outline-none w-full sm:w-60"
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
             />
@@ -196,7 +196,7 @@ export const AuditLogsPage = () => {
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex-shrink-0 active:scale-95 ${
                 activeTab === tab.id
                   ? 'bg-indigo-600 text-white border border-indigo-400 shadow-sm'
-                  : 'bg-slate-700/80 text-slate-300 hover:bg-slate-700 border border-slate-600'
+                  : 'bg-[#e0e5f4]/80 text-[#424a6b] hover:bg-[#e0e5f4] border border-[#dceaff]'
               }`}>
               {tab.label}
             </button>
@@ -206,39 +206,39 @@ export const AuditLogsPage = () => {
         {/* MOBILE CARDS VIEW (md:hidden) */}
         <div className="md:hidden space-y-3">
           {filteredLogs.length === 0 ? (
-            <div className="text-center p-8 text-slate-400 text-xs bg-slate-900/50 rounded-xl border border-slate-800">
+            <div className="text-center p-8 text-[#596383] text-xs bg-white/50 rounded-xl border border-[#edf0fb]">
               No matching audit logs found.
             </div>
           ) : (
             filteredLogs.map(log => (
               <div
                 key={log.id}
-                className="bg-slate-900 p-3.5 rounded-xl border border-slate-800 space-y-2.5 text-xs shadow-sm">
+                className="bg-white p-3.5 rounded-xl border border-[#edf0fb] space-y-2.5 text-xs shadow-sm">
                 <div className="flex items-center justify-between gap-2">
-                  <span className="font-extrabold text-white text-xs truncate">{log.action}</span>
+                  <span className="font-extrabold text-[#090a23] text-xs truncate">{log.action}</span>
                   <span className={`px-2 py-0.5 rounded text-[10px] font-black font-mono flex-shrink-0 ${getRoleBadgeClass(log.actorRole)}`}>
                     {log.actorRole}
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 text-[11px] pt-1 border-t border-slate-800">
+                <div className="grid grid-cols-2 gap-2 text-[11px] pt-1 border-t border-[#edf0fb]">
                   <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">Actor</span>
+                    <span className="text-[#7b819b] block text-[10px] uppercase font-bold">Actor</span>
                     <span className="font-mono text-indigo-300 font-bold truncate block">{log.actorId}</span>
                   </div>
                   <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">Target Entity</span>
-                    <span className="font-mono text-slate-300 truncate block">{log.entityType}:{log.entityId}</span>
+                    <span className="text-[#7b819b] block text-[10px] uppercase font-bold">Target Entity</span>
+                    <span className="font-mono text-[#424a6b] truncate block">{log.entityType}:{log.entityId}</span>
                   </div>
                 </div>
 
                 {log.metadata && (
-                  <div className="bg-slate-950 p-2 rounded-lg text-[10px] font-mono text-slate-400 break-all border border-slate-800/80">
+                  <div className="bg-[#fafbff] p-2 rounded-lg text-[10px] font-mono text-[#596383] break-all border border-[#edf0fb]/80">
                     {JSON.stringify(log.metadata)}
                   </div>
                 )}
 
-                <div className="flex items-center justify-between text-[10px] text-slate-500 pt-0.5">
+                <div className="flex items-center justify-between text-[10px] text-[#7b819b] pt-0.5">
                   <span className="font-mono">{log.id}</span>
                   <span>{log.createdAt}</span>
                 </div>
@@ -251,7 +251,7 @@ export const AuditLogsPage = () => {
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-slate-700 text-[11px] font-black text-slate-400 uppercase tracking-wider">
+              <tr className="border-b border-[#e0e5f4] text-[11px] font-black text-[#596383] uppercase tracking-wider">
                 <th className="p-3">Log ID</th>
                 <th className="p-3">Actor ID</th>
                 <th className="p-3">Role</th>
@@ -261,29 +261,29 @@ export const AuditLogsPage = () => {
                 <th className="p-3">Timestamp</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800 text-xs">
+            <tbody className="divide-y divide-[#edf0fb] text-xs">
               {filteredLogs.length === 0 ? (
                 <tr>
-                  <td colSpan="7" className="text-center p-8 text-slate-400">
+                  <td colSpan="7" className="text-center p-8 text-[#596383]">
                     No matching audit records found.
                   </td>
                 </tr>
               ) : (
                 filteredLogs.map(log => (
-                  <tr key={log.id} className="hover:bg-slate-700/30 transition-colors">
-                    <td className="p-3 font-mono text-slate-400">{log.id}</td>
+                  <tr key={log.id} className="hover:bg-[#f4f7fc]/30 transition-colors">
+                    <td className="p-3 font-mono text-[#596383]">{log.id}</td>
                     <td className="p-3 font-bold text-indigo-300">{log.actorId}</td>
                     <td className="p-3">
                       <span className={`px-2 py-0.5 rounded text-[10px] font-black font-mono ${getRoleBadgeClass(log.actorRole)}`}>
                         {log.actorRole}
                       </span>
                     </td>
-                    <td className="p-3 font-extrabold text-white">{log.action}</td>
-                    <td className="p-3 font-mono text-slate-300">{log.entityType}:{log.entityId}</td>
-                    <td className="p-3 text-[11px] text-slate-400 font-mono max-w-[200px] truncate" title={JSON.stringify(log.metadata)}>
+                    <td className="p-3 font-extrabold text-[#090a23]">{log.action}</td>
+                    <td className="p-3 font-mono text-[#424a6b]">{log.entityType}:{log.entityId}</td>
+                    <td className="p-3 text-[11px] text-[#596383] font-mono max-w-[200px] truncate" title={JSON.stringify(log.metadata)}>
                       {JSON.stringify(log.metadata)}
                     </td>
-                    <td className="p-3 text-slate-400 whitespace-nowrap">{log.createdAt}</td>
+                    <td className="p-3 text-[#596383] whitespace-nowrap">{log.createdAt}</td>
                   </tr>
                 ))
               )}

@@ -62,10 +62,10 @@ export function App() {
 
   return (
     <BrowserRouter>
-      <div className="flex flex-col lg:flex-row min-h-screen bg-slate-900 text-slate-100 font-sans antialiased">
+      <div className="flex flex-col lg:flex-row min-h-screen bg-white text-[#090a23] font-sans antialiased">
         <Sidebar />
 
-        <div className="flex-1 flex flex-col min-w-0 min-h-screen bg-slate-900">
+        <div className="flex-1 flex flex-col min-w-0 min-h-screen bg-white">
           <Routes>
             <Route
               path="/"
@@ -157,9 +157,9 @@ export function App() {
                 <>
                   <Header title="Security Policy & Inactivity Controls" />
                   <div className="flex-1 p-4 sm:p-6 lg:p-8 max-w-7xl mx-auto w-full space-y-6">
-                    <div className="bg-slate-800 rounded-2xl border border-slate-700 p-6 space-y-3">
-                      <h2 className="text-base font-extrabold text-white">Security & Session Policy</h2>
-                      <p className="text-xs text-slate-300 leading-relaxed">
+                    <div className="bg-white shadow-sm rounded-2xl border border-[#e0e5f4] p-6 space-y-3">
+                      <h2 className="text-base font-extrabold text-[#090a23]">Security & Session Policy</h2>
+                      <p className="text-xs text-[#424a6b] leading-relaxed">
                         Admin access tokens expire after 15 minutes. Sessions expire after 15 minutes of inactivity, with a maximum refresh lifetime of 12 hours.
                       </p>
                     </div>

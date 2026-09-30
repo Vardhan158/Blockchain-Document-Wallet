@@ -230,17 +230,17 @@ export const DocumentVerificationQueue = () => {
 
   return (
     <div>
-      <div className="bg-slate-800 rounded-2xl border border-slate-700 p-4 sm:p-5">
+      <div className="bg-white shadow-sm rounded-2xl border border-[#e0e5f4] p-4 sm:p-5">
         {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-700 mb-4 gap-3">
-          <h3 className="text-sm sm:text-base font-extrabold text-white flex items-center gap-2">
-            <FileCheck className="text-indigo-400 flex-shrink-0" size={20} />
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-[#e0e5f4] mb-4 gap-3">
+          <h3 className="text-sm sm:text-base font-extrabold text-[#090a23] flex items-center gap-2">
+            <FileCheck className="text-[#6442ff] flex-shrink-0" size={20} />
             <span>Citizen Document Verification Queue (Pipeline 1)</span>
           </h3>
 
           <button
             type="button"
-            className="flex items-center justify-center gap-1.5 px-3.5 py-2 bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold rounded-xl transition-colors cursor-pointer self-start sm:self-auto flex-shrink-0"
+            className="flex items-center justify-center gap-1.5 px-3.5 py-2 bg-[#f4f7fc] hover:bg-[#dceaff] text-[#090a23] text-xs font-bold rounded-xl transition-colors cursor-pointer self-start sm:self-auto flex-shrink-0"
             onClick={fetchDocs}>
             <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
             <span>Refresh Queue</span>
@@ -257,7 +257,7 @@ export const DocumentVerificationQueue = () => {
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer whitespace-nowrap flex-shrink-0 active:scale-95 ${
                 activeFilter === filter
                   ? 'bg-indigo-600 text-white border border-indigo-400 shadow-sm'
-                  : 'bg-slate-700/80 text-slate-300 hover:bg-slate-700 border border-slate-600'
+                  : 'bg-[#e0e5f4]/80 text-[#424a6b] hover:bg-[#e0e5f4] border border-[#dceaff]'
               }`}>
               {filter}
             </button>
@@ -267,18 +267,18 @@ export const DocumentVerificationQueue = () => {
         {/* MOBILE CARDS VIEW (md:hidden) */}
         <div className="md:hidden space-y-3">
           {filteredDocs.length === 0 ? (
-            <div className="p-8 text-center text-slate-400 text-xs bg-slate-900/50 rounded-xl border border-slate-800">
+            <div className="p-8 text-center text-[#596383] text-xs bg-white/50 rounded-xl border border-[#edf0fb]">
               No documents found matching filter "{activeFilter}".
             </div>
           ) : (
             filteredDocs.map((doc) => (
               <div
                 key={doc.id}
-                className="bg-slate-900 p-3.5 rounded-xl border border-slate-800 space-y-3 text-xs shadow-sm">
+                className="bg-white p-3.5 rounded-xl border border-[#edf0fb] space-y-3 text-xs shadow-sm">
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <strong className="text-white font-bold block truncate">{doc.title}</strong>
-                    <div className="text-[11px] text-slate-400 truncate mt-0.5">{doc.fileName}</div>
+                    <strong className="text-[#090a23] font-bold block truncate">{doc.title}</strong>
+                    <div className="text-[11px] text-[#596383] truncate mt-0.5">{doc.fileName}</div>
                   </div>
                   <span
                     className={`px-2.5 py-0.5 rounded-full text-[10px] font-black border flex-shrink-0 ${
@@ -292,23 +292,23 @@ export const DocumentVerificationQueue = () => {
                   </span>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 text-[11px] pt-1 border-t border-slate-800">
+                <div className="grid grid-cols-2 gap-2 text-[11px] pt-1 border-t border-[#edf0fb]">
                   <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">Type</span>
-                    <span className="text-slate-300 truncate block">{doc.documentType}</span>
+                    <span className="text-[#7b819b] block text-[10px] uppercase font-bold">Type</span>
+                    <span className="text-[#424a6b] truncate block">{doc.documentType}</span>
                   </div>
                   <div>
-                    <span className="text-slate-500 block text-[10px] uppercase font-bold">Citizen ID</span>
+                    <span className="text-[#7b819b] block text-[10px] uppercase font-bold">Citizen ID</span>
                     <span className="font-mono text-indigo-300 font-bold truncate block">{doc.userPublicId || 'BDW-9K7F3A2'}</span>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-2 pt-0.5">
-                  <span className="text-slate-500 text-[10px] uppercase font-bold">Tag:</span>
+                  <span className="text-[#7b819b] text-[10px] uppercase font-bold">Tag:</span>
                   <span className="px-2 py-0.5 rounded text-[10px] font-black font-mono bg-indigo-900 text-white">
                     {doc.requestedTag || 'VEHICLE'}
                   </span>
-                  <span className="text-slate-600">→</span>
+                  <span className="text-[#7b819b]">→</span>
                   <span
                     className={`px-2 py-0.5 rounded text-[10px] font-black font-mono text-white ${
                       doc.approvedTag === 'VEHICLE' ? 'bg-sky-700' : 'bg-indigo-900'
@@ -318,7 +318,7 @@ export const DocumentVerificationQueue = () => {
                 </div>
 
                 {/* Mobile Action Buttons */}
-                <div className="pt-2 border-t border-slate-800 flex flex-col gap-2">
+                <div className="pt-2 border-t border-[#edf0fb] flex flex-col gap-2">
                   <div className="flex gap-2">
                     {doc.status !== 'APPROVED' && (
                       <button
@@ -361,7 +361,7 @@ export const DocumentVerificationQueue = () => {
                     {doc.status === 'APPROVED' && (
                       <button
                         type="button"
-                        className="px-2.5 py-1.5 bg-emerald-950 border border-emerald-500 text-emerald-300 text-[11px] font-bold rounded-md flex items-center gap-1 cursor-pointer"
+                        className="px-2.5 py-1.5 bg-emerald-950 border border-[#c7f4e4] text-emerald-300 text-[11px] font-bold rounded-md flex items-center gap-1 cursor-pointer"
                         onClick={() => handleVerifyBlockchain(doc)}>
                         <Database size={12} /> Blockchain
                       </button>
@@ -369,7 +369,7 @@ export const DocumentVerificationQueue = () => {
 
                     <button
                       type="button"
-                      className="px-2.5 py-1.5 bg-slate-800 text-slate-200 text-[11px] font-bold rounded-md flex items-center gap-1 cursor-pointer"
+                      className="px-2.5 py-1.5 bg-white shadow-sm text-[#171438] text-[11px] font-bold rounded-md flex items-center gap-1 cursor-pointer"
                       onClick={() => {
                         setSelectedDoc(doc);
                         setShowPreviewModal(true);
@@ -379,7 +379,7 @@ export const DocumentVerificationQueue = () => {
 
                     <button
                       type="button"
-                      className="px-2.5 py-1.5 bg-slate-800 text-slate-200 text-[11px] font-bold rounded-md flex items-center gap-1 cursor-pointer"
+                      className="px-2.5 py-1.5 bg-white shadow-sm text-[#171438] text-[11px] font-bold rounded-md flex items-center gap-1 cursor-pointer"
                       onClick={() => {
                         setSelectedDoc(doc);
                         setShowHistoryModal(true);
@@ -389,7 +389,7 @@ export const DocumentVerificationQueue = () => {
 
                     <button
                       type="button"
-                      className="px-2.5 py-1.5 bg-indigo-950 border border-indigo-500 text-indigo-200 text-[11px] font-bold rounded-md flex items-center gap-1 cursor-pointer"
+                      className="px-2.5 py-1.5 bg-[#6442ff] border border-[#6442ff] text-indigo-200 text-[11px] font-bold rounded-md flex items-center gap-1 cursor-pointer"
                       onClick={() => {
                         setSelectedDoc(doc);
                         setNewTag(doc.approvedTag === 'VEHICLE' ? 'NORMAL' : 'VEHICLE');
@@ -408,7 +408,7 @@ export const DocumentVerificationQueue = () => {
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-slate-700 text-[11px] font-black text-slate-400 uppercase tracking-wider">
+              <tr className="border-b border-[#e0e5f4] text-[11px] font-black text-[#596383] uppercase tracking-wider">
                 <th className="p-3">Document Title</th>
                 <th className="p-3">Type</th>
                 <th className="p-3">Citizen User ID</th>
@@ -418,21 +418,21 @@ export const DocumentVerificationQueue = () => {
                 <th className="p-3">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800 text-xs">
+            <tbody className="divide-y divide-[#edf0fb] text-xs">
               {filteredDocs.length === 0 ? (
                 <tr>
-                  <td colSpan="7" className="text-center p-10 text-slate-400">
+                  <td colSpan="7" className="text-center p-10 text-[#596383]">
                     No documents found matching filter "{activeFilter}".
                   </td>
                 </tr>
               ) : (
                 filteredDocs.map((doc) => (
-                  <tr key={doc.id} className="hover:bg-slate-700/30 transition-colors">
+                  <tr key={doc.id} className="hover:bg-[#f4f7fc]/30 transition-colors">
                     <td className="p-3">
-                      <strong className="text-white font-bold">{doc.title}</strong>
-                      <div className="text-[11px] text-slate-400 mt-0.5">{doc.fileName}</div>
+                      <strong className="text-[#090a23] font-bold">{doc.title}</strong>
+                      <div className="text-[11px] text-[#596383] mt-0.5">{doc.fileName}</div>
                     </td>
-                    <td className="p-3 text-slate-300">{doc.documentType}</td>
+                    <td className="p-3 text-[#424a6b]">{doc.documentType}</td>
                     <td className="p-3 font-mono text-indigo-300 font-bold">
                       {doc.userPublicId || 'BDW-9K7F3A2'}
                     </td>
@@ -504,7 +504,7 @@ export const DocumentVerificationQueue = () => {
                         {doc.status === 'APPROVED' && (
                           <button
                             type="button"
-                            className="px-2.5 py-1.5 bg-emerald-950 border border-emerald-500 hover:bg-emerald-900 text-emerald-300 text-[11px] font-bold rounded-md flex items-center gap-1 cursor-pointer transition-colors"
+                            className="px-2.5 py-1.5 bg-emerald-950 border border-[#c7f4e4] hover:bg-emerald-900 text-emerald-300 text-[11px] font-bold rounded-md flex items-center gap-1 cursor-pointer transition-colors"
                             onClick={() => handleVerifyBlockchain(doc)}>
                             <Database size={13} /> Verify Blockchain
                           </button>
@@ -513,7 +513,7 @@ export const DocumentVerificationQueue = () => {
                         {/* SECTION 37 & 38: VIEW VERSION HISTORY */}
                         <button
                           type="button"
-                          className="px-2.5 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-200 text-[11px] font-bold rounded-md flex items-center gap-1 cursor-pointer transition-colors"
+                          className="px-2.5 py-1.5 bg-[#f4f7fc] hover:bg-[#dceaff] text-[#171438] text-[11px] font-bold rounded-md flex items-center gap-1 cursor-pointer transition-colors"
                           onClick={() => {
                             setSelectedDoc(doc);
                             setShowHistoryModal(true);
@@ -523,7 +523,7 @@ export const DocumentVerificationQueue = () => {
 
                         <button
                           type="button"
-                          className="px-2.5 py-1.5 bg-indigo-950 hover:bg-indigo-900 border border-indigo-500 text-indigo-200 text-[11px] font-bold rounded-md flex items-center gap-1 cursor-pointer transition-colors"
+                          className="px-2.5 py-1.5 bg-[#6442ff] hover:bg-indigo-900 border border-[#6442ff] text-indigo-200 text-[11px] font-bold rounded-md flex items-center gap-1 cursor-pointer transition-colors"
                           onClick={() => {
                             setSelectedDoc(doc);
                             setNewTag(doc.approvedTag === 'VEHICLE' ? 'NORMAL' : 'VEHICLE');
@@ -534,7 +534,7 @@ export const DocumentVerificationQueue = () => {
 
                         <button
                           type="button"
-                          className="px-2.5 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-200 text-[11px] font-bold rounded-md flex items-center gap-1 cursor-pointer transition-colors"
+                          className="px-2.5 py-1.5 bg-[#f4f7fc] hover:bg-[#dceaff] text-[#171438] text-[11px] font-bold rounded-md flex items-center gap-1 cursor-pointer transition-colors"
                           onClick={() => {
                             setSelectedDoc(doc);
                             setShowPreviewModal(true);
@@ -554,43 +554,43 @@ export const DocumentVerificationQueue = () => {
       {/* Approve Modal */}
       {showApproveModal && (
         <div className="fixed inset-0 bg-black/85 flex items-center justify-center p-3 sm:p-5 z-50 overflow-y-auto">
-          <div className="bg-slate-800 rounded-2xl border border-slate-700 w-full max-w-lg max-h-[90vh] overflow-y-auto p-4 sm:p-6 shadow-2xl space-y-4">
-            <div className="flex justify-between items-center pb-2 border-b border-slate-700">
-              <h3 className="text-sm sm:text-base font-extrabold text-white flex items-center gap-2">
-                <ShieldCheck className="text-emerald-400 flex-shrink-0" size={18} />
+          <div className="bg-white shadow-sm rounded-2xl border border-[#e0e5f4] w-full max-w-lg max-h-[90vh] overflow-y-auto p-4 sm:p-6 shadow-2xl space-y-4">
+            <div className="flex justify-between items-center pb-2 border-b border-[#e0e5f4]">
+              <h3 className="text-sm sm:text-base font-extrabold text-[#090a23] flex items-center gap-2">
+                <ShieldCheck className="text-[#009963] flex-shrink-0" size={18} />
                 <span>Approve Document?</span>
               </h3>
               <button
                 type="button"
-                className="text-slate-400 hover:text-white text-lg p-1 cursor-pointer"
+                className="text-[#596383] hover:text-[#090a23] text-lg p-1 cursor-pointer"
                 onClick={() => setShowApproveModal(false)}>
                 ✕
               </button>
             </div>
 
-            <div className="bg-slate-900 rounded-xl p-3.5 sm:p-4 space-y-2 border border-slate-800 text-xs">
+            <div className="bg-white rounded-xl p-3.5 sm:p-4 space-y-2 border border-[#edf0fb] text-xs">
               <div className="flex justify-between">
-                <span className="text-slate-400 font-semibold">Document:</span>
-                <span className="font-extrabold text-white truncate max-w-[200px]">{selectedDoc?.title}</span>
+                <span className="text-[#596383] font-semibold">Document:</span>
+                <span className="font-extrabold text-[#090a23] truncate max-w-[200px]">{selectedDoc?.title}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400 font-semibold">Type:</span>
-                <span className="font-bold text-slate-200">{selectedDoc?.documentType}</span>
+                <span className="text-[#596383] font-semibold">Type:</span>
+                <span className="font-bold text-[#171438]">{selectedDoc?.documentType}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400 font-semibold">Final Category:</span>
+                <span className="text-[#596383] font-semibold">Final Category:</span>
                 <span className="px-2 py-0.5 bg-sky-800 text-white rounded font-mono font-black text-[10px]">
                   {selectedDoc?.approvedTag || 'VEHICLE'}
                 </span>
               </div>
             </div>
 
-            <p className="text-xs text-slate-300 leading-relaxed italic">
+            <p className="text-xs text-[#424a6b] leading-relaxed italic">
               "This action will verify the document and create a blockchain verification record on DocumentRegistry.sol."
             </p>
 
             {processingStage && (
-              <div className="bg-indigo-950/60 border border-indigo-500/50 p-3 rounded-xl text-xs font-bold text-indigo-300 text-center animate-pulse">
+              <div className="bg-[#6442ff]/60 border border-[#6442ff]/50 p-3 rounded-xl text-xs font-bold text-indigo-300 text-center animate-pulse">
                 {processingStage}
               </div>
             )}
@@ -599,7 +599,7 @@ export const DocumentVerificationQueue = () => {
               <button
                 type="button"
                 disabled={loading}
-                className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-bold rounded-xl disabled:opacity-50 cursor-pointer"
+                className="px-4 py-2 bg-[#f4f7fc] hover:bg-[#dceaff] text-[#171438] text-xs font-bold rounded-xl disabled:opacity-50 cursor-pointer"
                 onClick={() => setShowApproveModal(false)}>
                 Cancel
               </button>
@@ -618,35 +618,35 @@ export const DocumentVerificationQueue = () => {
       {/* Reject Modal */}
       {showRejectModal && (
         <div className="fixed inset-0 bg-black/85 flex items-center justify-center p-3 sm:p-5 z-50 overflow-y-auto">
-          <div className="bg-slate-800 rounded-2xl border border-slate-700 w-full max-w-lg max-h-[90vh] overflow-y-auto p-4 sm:p-6 shadow-2xl space-y-4">
-            <div className="flex justify-between items-center pb-2 border-b border-slate-700">
-              <h3 className="text-sm sm:text-base font-extrabold text-white flex items-center gap-2">
-                <X className="text-red-400 flex-shrink-0" size={18} />
+          <div className="bg-white shadow-sm rounded-2xl border border-[#e0e5f4] w-full max-w-lg max-h-[90vh] overflow-y-auto p-4 sm:p-6 shadow-2xl space-y-4">
+            <div className="flex justify-between items-center pb-2 border-b border-[#e0e5f4]">
+              <h3 className="text-sm sm:text-base font-extrabold text-[#090a23] flex items-center gap-2">
+                <X className="text-[#ef2547] flex-shrink-0" size={18} />
                 <span>Reject Document?</span>
               </h3>
               <button
                 type="button"
-                className="text-slate-400 hover:text-white text-lg p-1 cursor-pointer"
+                className="text-[#596383] hover:text-[#090a23] text-lg p-1 cursor-pointer"
                 onClick={() => setShowRejectModal(false)}>
                 ✕
               </button>
             </div>
 
-            <div className="bg-slate-900 rounded-xl p-3 text-xs space-y-1">
-              <div className="text-slate-400">
-                Target Document: <strong className="text-white">{selectedDoc?.title}</strong>
+            <div className="bg-white rounded-xl p-3 text-xs space-y-1">
+              <div className="text-[#596383]">
+                Target Document: <strong className="text-[#090a23]">{selectedDoc?.title}</strong>
               </div>
-              <div className="text-slate-400">
-                Type: <span className="text-slate-200">{selectedDoc?.documentType}</span>
+              <div className="text-[#596383]">
+                Type: <span className="text-[#171438]">{selectedDoc?.documentType}</span>
               </div>
             </div>
 
             <div>
-              <label className="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1.5">
+              <label className="block text-[10px] font-black text-[#596383] uppercase tracking-wider mb-1.5">
                 SELECT REJECTION REASON *
               </label>
               <select
-                className="w-full p-2.5 sm:p-3 bg-slate-900 border border-slate-700 rounded-xl text-white text-xs font-bold outline-none"
+                className="w-full p-2.5 sm:p-3 bg-white border border-[#e0e5f4] rounded-xl text-[#090a23] text-xs font-bold outline-none"
                 value={selectedReason}
                 onChange={(e) => setSelectedReason(e.target.value)}>
                 {PREDEFINED_REASONS.map((r) => (
@@ -659,12 +659,12 @@ export const DocumentVerificationQueue = () => {
 
             {selectedReason === 'Other' && (
               <div>
-                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1.5">
+                <label className="block text-[10px] font-black text-[#596383] uppercase tracking-wider mb-1.5">
                   CUSTOM REJECTION REASON *
                 </label>
                 <input
                   type="text"
-                  className="w-full p-2.5 sm:p-3 bg-slate-900 border border-slate-700 rounded-xl text-white text-xs outline-none focus:border-indigo-500"
+                  className="w-full p-2.5 sm:p-3 bg-white border border-[#e0e5f4] rounded-xl text-[#090a23] text-xs outline-none focus:border-[#6442ff]"
                   placeholder="Enter specific custom rejection reason..."
                   value={customReason}
                   onChange={(e) => setCustomReason(e.target.value)}
@@ -672,7 +672,7 @@ export const DocumentVerificationQueue = () => {
               </div>
             )}
 
-            <p className="text-xs text-slate-300 leading-relaxed italic">
+            <p className="text-xs text-[#424a6b] leading-relaxed italic">
               "Reason: {selectedReason === 'Other' ? customReason || 'Custom Reason' : selectedReason}. The user will be
               notified and may upload a corrected document."
             </p>
@@ -680,7 +680,7 @@ export const DocumentVerificationQueue = () => {
             <div className="flex justify-end gap-2.5 pt-2">
               <button
                 type="button"
-                className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-bold rounded-xl cursor-pointer"
+                className="px-4 py-2 bg-[#f4f7fc] hover:bg-[#dceaff] text-[#171438] text-xs font-bold rounded-xl cursor-pointer"
                 onClick={() => setShowRejectModal(false)}>
                 Cancel
               </button>
@@ -698,36 +698,36 @@ export const DocumentVerificationQueue = () => {
       {/* SECTIONS 39 & 40: DOCUMENT REVOCATION MODAL */}
       {showRevokeModal && (
         <div className="fixed inset-0 bg-black/85 flex items-center justify-center p-3 sm:p-5 z-50 overflow-y-auto">
-          <div className="bg-slate-800 rounded-2xl border border-red-700 w-full max-w-lg max-h-[90vh] overflow-y-auto p-4 sm:p-6 shadow-2xl space-y-4">
+          <div className="bg-white shadow-sm rounded-2xl border border-red-700 w-full max-w-lg max-h-[90vh] overflow-y-auto p-4 sm:p-6 shadow-2xl space-y-4">
             <div className="flex justify-between items-center pb-2 border-b border-red-800">
-              <h3 className="text-sm sm:text-base font-extrabold text-red-400 flex items-center gap-2">
-                <ShieldAlert className="text-red-500 flex-shrink-0" size={18} />
+              <h3 className="text-sm sm:text-base font-extrabold text-[#ef2547] flex items-center gap-2">
+                <ShieldAlert className="text-[#ef2547] flex-shrink-0" size={18} />
                 <span>Revoke Document On-Chain?</span>
               </h3>
               <button
                 type="button"
-                className="text-slate-400 hover:text-white text-lg p-1 cursor-pointer"
+                className="text-[#596383] hover:text-[#090a23] text-lg p-1 cursor-pointer"
                 onClick={() => setShowRevokeModal(false)}>
                 ✕
               </button>
             </div>
 
-            <div className="bg-slate-900 rounded-xl p-3 text-xs space-y-1 border border-red-900/50">
-              <div className="text-slate-300">
-                Revoking Document: <strong className="text-white">{selectedDoc?.title}</strong>
+            <div className="bg-white rounded-xl p-3 text-xs space-y-1 border border-red-900/50">
+              <div className="text-[#424a6b]">
+                Revoking Document: <strong className="text-[#090a23]">{selectedDoc?.title}</strong>
               </div>
-              <div className="text-slate-400">
+              <div className="text-[#596383]">
                 Owner User ID:{' '}
                 <span className="text-indigo-300 font-mono">{selectedDoc?.userPublicId || 'BDW-9K7F3A2'}</span>
               </div>
             </div>
 
             <div>
-              <label className="block text-[10px] font-black text-red-400 uppercase tracking-wider mb-1.5">
+              <label className="block text-[10px] font-black text-[#ef2547] uppercase tracking-wider mb-1.5">
                 SELECT REVOCATION REASON *
               </label>
               <select
-                className="w-full p-2.5 sm:p-3 bg-slate-900 border border-slate-700 rounded-xl text-white text-xs font-bold outline-none"
+                className="w-full p-2.5 sm:p-3 bg-white border border-[#e0e5f4] rounded-xl text-[#090a23] text-xs font-bold outline-none"
                 value={revokeReason}
                 onChange={(e) => setRevokeReason(e.target.value)}>
                 {REVOCATION_REASONS.map((r) => (
@@ -740,12 +740,12 @@ export const DocumentVerificationQueue = () => {
 
             {revokeReason === 'Other' && (
               <div>
-                <label className="block text-[10px] font-black text-red-400 uppercase tracking-wider mb-1.5">
+                <label className="block text-[10px] font-black text-[#ef2547] uppercase tracking-wider mb-1.5">
                   CUSTOM REVOCATION REASON *
                 </label>
                 <input
                   type="text"
-                  className="w-full p-2.5 sm:p-3 bg-slate-900 border border-slate-700 rounded-xl text-white text-xs outline-none focus:border-red-500"
+                  className="w-full p-2.5 sm:p-3 bg-white border border-[#e0e5f4] rounded-xl text-[#090a23] text-xs outline-none focus:border-[#ffd3dc]"
                   placeholder="Enter custom revocation reason..."
                   value={customRevokeReason}
                   onChange={(e) => setCustomRevokeReason(e.target.value)}
@@ -761,7 +761,7 @@ export const DocumentVerificationQueue = () => {
             <div className="flex flex-col sm:flex-row justify-end gap-2.5 pt-2">
               <button
                 type="button"
-                className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-bold rounded-xl cursor-pointer"
+                className="px-4 py-2 bg-[#f4f7fc] hover:bg-[#dceaff] text-[#171438] text-xs font-bold rounded-xl cursor-pointer"
                 onClick={() => setShowRevokeModal(false)}>
                 Cancel
               </button>
@@ -779,15 +779,15 @@ export const DocumentVerificationQueue = () => {
       {/* SECTIONS 36 & 37: VERSION HISTORY MODAL */}
       {showHistoryModal && (
         <div className="fixed inset-0 bg-black/85 flex items-center justify-center p-3 sm:p-5 z-50 overflow-y-auto">
-          <div className="bg-slate-800 rounded-2xl border border-slate-700 w-full max-w-lg max-h-[90vh] overflow-y-auto p-4 sm:p-6 shadow-2xl space-y-4">
-            <div className="flex justify-between items-center pb-2 border-b border-slate-700">
-              <h3 className="text-sm sm:text-base font-extrabold text-white flex items-center gap-2">
-                <History className="text-indigo-400 flex-shrink-0" size={18} />
+          <div className="bg-white shadow-sm rounded-2xl border border-[#e0e5f4] w-full max-w-lg max-h-[90vh] overflow-y-auto p-4 sm:p-6 shadow-2xl space-y-4">
+            <div className="flex justify-between items-center pb-2 border-b border-[#e0e5f4]">
+              <h3 className="text-sm sm:text-base font-extrabold text-[#090a23] flex items-center gap-2">
+                <History className="text-[#6442ff] flex-shrink-0" size={18} />
                 <span className="truncate">Document Version History: {selectedDoc?.title}</span>
               </h3>
               <button
                 type="button"
-                className="text-slate-400 hover:text-white text-lg p-1 cursor-pointer"
+                className="text-[#596383] hover:text-[#090a23] text-lg p-1 cursor-pointer"
                 onClick={() => setShowHistoryModal(false)}>
                 ✕
               </button>
@@ -795,23 +795,23 @@ export const DocumentVerificationQueue = () => {
 
             <div className="space-y-3">
               {/* Version 1 Record */}
-              <div className="bg-slate-900 rounded-xl p-3.5 border border-slate-800 flex justify-between items-center text-xs">
+              <div className="bg-white rounded-xl p-3.5 border border-[#edf0fb] flex justify-between items-center text-xs">
                 <div>
-                  <div className="font-extrabold text-white">Version 1</div>
-                  <div className="text-slate-400 text-[11px] mt-0.5">SHA-256: 92ab7d3a8901bc7d2e...</div>
-                  <div className="text-slate-500 text-[10px]">27 Sep 2026, 04:30 PM</div>
+                  <div className="font-extrabold text-[#090a23]">Version 1</div>
+                  <div className="text-[#596383] text-[11px] mt-0.5">SHA-256: 92ab7d3a8901bc7d2e...</div>
+                  <div className="text-[#7b819b] text-[10px]">27 Sep 2026, 04:30 PM</div>
                 </div>
-                <span className="px-2.5 py-1 rounded-full text-[10px] font-black bg-red-950/60 text-red-400 border border-red-500">
+                <span className="px-2.5 py-1 rounded-full text-[10px] font-black bg-red-950/60 text-[#ef2547] border border-[#ffd3dc]">
                   REJECTED
                 </span>
               </div>
 
               {/* Version 2 Record */}
-              <div className="bg-slate-900 rounded-xl p-3.5 border border-indigo-500/50 flex justify-between items-center text-xs">
+              <div className="bg-white rounded-xl p-3.5 border border-[#6442ff]/50 flex justify-between items-center text-xs">
                 <div>
-                  <div className="font-extrabold text-white">Version 2 (Current)</div>
-                  <div className="text-slate-400 text-[11px] mt-0.5">SHA-256: e3b0c44298fc1c149a...</div>
-                  <div className="text-slate-500 text-[10px]">28 Sep 2026, 10:38 AM</div>
+                  <div className="font-extrabold text-[#090a23]">Version 2 (Current)</div>
+                  <div className="text-[#596383] text-[11px] mt-0.5">SHA-256: e3b0c44298fc1c149a...</div>
+                  <div className="text-[#7b819b] text-[10px]">28 Sep 2026, 10:38 AM</div>
                 </div>
                 <span
                   className={`px-2.5 py-1 rounded-full text-[10px] font-black border ${
@@ -824,14 +824,14 @@ export const DocumentVerificationQueue = () => {
               </div>
             </div>
 
-            <p className="text-[11px] text-slate-400 italic text-center pt-2">
+            <p className="text-[11px] text-[#596383] italic text-center pt-2">
               "Never delete previous verification decisions. Complete decision audit history preserved."
             </p>
 
             <div className="flex justify-end">
               <button
                 type="button"
-                className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-bold rounded-xl cursor-pointer"
+                className="px-4 py-2 bg-[#f4f7fc] hover:bg-[#dceaff] text-[#171438] text-xs font-bold rounded-xl cursor-pointer"
                 onClick={() => setShowHistoryModal(false)}>
                 Close History
               </button>
@@ -843,24 +843,24 @@ export const DocumentVerificationQueue = () => {
       {/* Tag Correction Modal */}
       {showTagModal && (
         <div className="fixed inset-0 bg-black/85 flex items-center justify-center p-3 sm:p-5 z-50 overflow-y-auto">
-          <div className="bg-slate-800 rounded-2xl border border-slate-700 w-full max-w-lg max-h-[90vh] overflow-y-auto p-4 sm:p-6 shadow-2xl space-y-4">
+          <div className="bg-white shadow-sm rounded-2xl border border-[#e0e5f4] w-full max-w-lg max-h-[90vh] overflow-y-auto p-4 sm:p-6 shadow-2xl space-y-4">
             <div className="flex justify-between items-center">
-              <h3 className="text-sm sm:text-base font-bold text-white truncate">Tag Correction: {selectedDoc?.title}</h3>
+              <h3 className="text-sm sm:text-base font-bold text-[#090a23] truncate">Tag Correction: {selectedDoc?.title}</h3>
               <button
                 type="button"
-                className="text-slate-400 hover:text-white text-lg p-1 cursor-pointer"
+                className="text-[#596383] hover:text-[#090a23] text-lg p-1 cursor-pointer"
                 onClick={() => setShowTagModal(false)}>
                 ✕
               </button>
             </div>
-            <p className="text-xs text-slate-400">Select corrected visibility category tag:</p>
+            <p className="text-xs text-[#596383]">Select corrected visibility category tag:</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 my-4">
               <button
                 type="button"
                 className={`p-3.5 rounded-xl text-xs font-bold border transition-colors cursor-pointer text-left ${
                   newTag === 'VEHICLE'
                     ? 'bg-sky-700 text-white border-sky-400'
-                    : 'bg-slate-900 text-slate-300 border-slate-700'
+                    : 'bg-[#ffffff] text-[#424a6b] border-[#e0e5f4]'
                 }`}
                 onClick={() => setNewTag('VEHICLE')}>
                 🚗 VEHICLE (Police Accessible)
@@ -871,7 +871,7 @@ export const DocumentVerificationQueue = () => {
                 className={`p-3.5 rounded-xl text-xs font-bold border transition-colors cursor-pointer text-left ${
                   newTag === 'NORMAL'
                     ? 'bg-indigo-900 text-white border-indigo-500'
-                    : 'bg-slate-900 text-slate-300 border-slate-700'
+                    : 'bg-[#ffffff] text-[#424a6b] border-[#e0e5f4]'
                 }`}
                 onClick={() => setNewTag('NORMAL')}>
                 📁 NORMAL (Private Vault)
@@ -880,13 +880,13 @@ export const DocumentVerificationQueue = () => {
             <div className="flex justify-end gap-2.5">
               <button
                 type="button"
-                className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-bold rounded-xl cursor-pointer"
+                className="px-4 py-2 bg-[#f4f7fc] hover:bg-[#dceaff] text-[#171438] text-xs font-bold rounded-xl cursor-pointer"
                 onClick={() => setShowTagModal(false)}>
                 Cancel
               </button>
               <button
                 type="button"
-                className="px-4 py-2 bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold rounded-xl cursor-pointer"
+                className="px-4 py-2 bg-[#6442ff] hover:bg-[#5231e3] text-white text-xs font-bold rounded-xl cursor-pointer"
                 onClick={handleConfirmTagChange}>
                 Save Corrected Tag
               </button>
@@ -898,24 +898,24 @@ export const DocumentVerificationQueue = () => {
       {/* Document Inspection Preview Modal */}
       {showPreviewModal && (
         <div className="fixed inset-0 bg-black/85 flex items-center justify-center p-3 sm:p-5 z-50 overflow-y-auto">
-          <div className="bg-slate-800 rounded-2xl border border-slate-700 w-full max-w-lg max-h-[90vh] overflow-y-auto p-4 sm:p-6 shadow-2xl space-y-4">
+          <div className="bg-white shadow-sm rounded-2xl border border-[#e0e5f4] w-full max-w-lg max-h-[90vh] overflow-y-auto p-4 sm:p-6 shadow-2xl space-y-4">
             <div className="flex justify-between items-center">
-              <h3 className="text-sm sm:text-base font-bold text-white truncate">Inspect Document: {selectedDoc?.title}</h3>
+              <h3 className="text-sm sm:text-base font-bold text-[#090a23] truncate">Inspect Document: {selectedDoc?.title}</h3>
               <button
                 type="button"
-                className="text-slate-400 hover:text-white text-lg p-1 cursor-pointer"
+                className="text-[#596383] hover:text-[#090a23] text-lg p-1 cursor-pointer"
                 onClick={() => setShowPreviewModal(false)}>
                 ✕
               </button>
             </div>
-            <div className="bg-slate-900 rounded-xl p-3.5 sm:p-4 space-y-3">
-              <div className="text-[11px] font-bold text-slate-400">UNENCRYPTED SHA-256 HASH</div>
-              <div className="p-2.5 bg-slate-950 rounded-lg font-mono text-[11px] text-slate-200 break-all">
+            <div className="bg-white rounded-xl p-3.5 sm:p-4 space-y-3">
+              <div className="text-[11px] font-bold text-[#596383]">UNENCRYPTED SHA-256 HASH</div>
+              <div className="p-2.5 bg-[#fafbff] rounded-lg font-mono text-[11px] text-[#171438] break-all">
                 {selectedDoc?.documentHash || 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}
               </div>
 
-              <div className="text-[11px] font-bold text-slate-400 pt-2">FILE STORAGE LOCATION</div>
-              <div className="p-2.5 bg-slate-950 rounded-lg font-mono text-[11px] text-slate-200 break-all">
+              <div className="text-[11px] font-bold text-[#596383] pt-2">FILE STORAGE LOCATION</div>
+              <div className="p-2.5 bg-[#fafbff] rounded-lg font-mono text-[11px] text-[#171438] break-all">
                 {selectedDoc?.filePath || 'uploads/encrypted_DOC-KA01MJ4092.enc'}
               </div>
             </div>
@@ -923,7 +923,7 @@ export const DocumentVerificationQueue = () => {
             <div className="flex justify-end">
               <button
                 type="button"
-                className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-bold rounded-xl cursor-pointer"
+                className="px-4 py-2 bg-[#f4f7fc] hover:bg-[#dceaff] text-[#171438] text-xs font-bold rounded-xl cursor-pointer"
                 onClick={() => setShowPreviewModal(false)}>
                 Close Inspection
               </button>

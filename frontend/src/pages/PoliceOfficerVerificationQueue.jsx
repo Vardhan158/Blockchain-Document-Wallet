@@ -161,10 +161,10 @@ export const PoliceOfficerVerificationQueue = () => {
 
   return (
     <div>
-      <div className="bg-slate-800 rounded-2xl border border-slate-700 p-5">
-        <div className="flex justify-between items-center pb-3 border-b border-slate-700 mb-5">
-          <h3 className="text-base font-extrabold text-white flex items-center gap-2">
-            <UserCheck className="text-amber-400" size={22} />
+      <div className="bg-white shadow-sm rounded-2xl border border-[#e0e5f4] p-5">
+        <div className="flex justify-between items-center pb-3 border-b border-[#e0e5f4] mb-5">
+          <h3 className="text-base font-extrabold text-[#090a23] flex items-center gap-2">
+            <UserCheck className="text-[#bd8100]" size={22} />
             Police / Government Registration Management (Section 52)
           </h3>
         </div>
@@ -177,8 +177,8 @@ export const PoliceOfficerVerificationQueue = () => {
               onClick={() => setActiveFilter(f)}
               className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
                 activeFilter === f
-                  ? 'bg-amber-500 text-slate-950 font-black'
-                  : 'bg-slate-700/80 text-slate-300 hover:bg-slate-700 border border-slate-600'
+                  ? 'bg-amber-500 text-[#ffffff] font-black'
+                  : 'bg-[#e0e5f4]/80 text-[#424a6b] hover:bg-[#e0e5f4] border border-[#dceaff]'
               }`}>
               {f === 'PENDING' ? 'Pending Requests' : f}
             </button>
@@ -189,7 +189,7 @@ export const PoliceOfficerVerificationQueue = () => {
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-slate-700 text-[11px] font-black text-slate-400 uppercase tracking-wider">
+              <tr className="border-b border-[#e0e5f4] text-[11px] font-black text-[#596383] uppercase tracking-wider">
                 <th className="p-3">Officer Name</th>
                 <th className="p-3">Employee ID</th>
                 <th className="p-3">Rank</th>
@@ -201,23 +201,23 @@ export const PoliceOfficerVerificationQueue = () => {
                 <th className="p-3">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800 text-xs">
+            <tbody className="divide-y divide-[#edf0fb] text-xs">
               {filteredOfficers.length === 0 ? (
                 <tr>
-                  <td colSpan="9" className="text-center p-10 text-slate-400">
+                  <td colSpan="9" className="text-center p-10 text-[#596383]">
                     No police officer requests matching status "{activeFilter}".
                   </td>
                 </tr>
               ) : (
                 filteredOfficers.map(off => (
-                  <tr key={off.id} className="hover:bg-slate-700/30 transition-colors">
-                    <td className="p-3"><strong className="text-white font-bold">{off.fullName}</strong></td>
+                  <tr key={off.id} className="hover:bg-[#f4f7fc]/30 transition-colors">
+                    <td className="p-3"><strong className="text-[#090a23] font-bold">{off.fullName}</strong></td>
                     <td className="p-3 font-mono text-indigo-300 font-extrabold">{off.employeeId}</td>
-                    <td className="p-3 text-slate-200">{off.rankDesignation || 'Inspector'}</td>
-                    <td className="p-3 text-slate-200">{off.policeStation}</td>
-                    <td className="p-3 text-slate-300">{off.district}</td>
-                    <td className="p-3 text-slate-300">{off.state}</td>
-                    <td className="p-3 text-slate-400">{off.createdAt || '28 Sep 2026'}</td>
+                    <td className="p-3 text-[#171438]">{off.rankDesignation || 'Inspector'}</td>
+                    <td className="p-3 text-[#171438]">{off.policeStation}</td>
+                    <td className="p-3 text-[#424a6b]">{off.district}</td>
+                    <td className="p-3 text-[#424a6b]">{off.state}</td>
+                    <td className="p-3 text-[#596383]">{off.createdAt || '28 Sep 2026'}</td>
                     <td className="p-3">
                       <span className={`px-2.5 py-1 rounded-full text-[10px] font-black border ${off.status === 'APPROVED' ? 'bg-emerald-950/60 text-emerald-400 border-emerald-500' : off.status === 'REJECTED' ? 'bg-red-950/60 text-red-400 border-red-500' : 'bg-amber-950/60 text-amber-400 border-amber-500'}`}>
                         {off.status || 'PENDING_APPROVAL'}
@@ -226,7 +226,7 @@ export const PoliceOfficerVerificationQueue = () => {
                     <td className="p-3">
                       <div className="flex gap-1.5 flex-wrap">
                         <button
-                          className="px-2.5 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-200 text-[11px] font-bold rounded-md flex items-center gap-1 cursor-pointer transition-colors"
+                          className="px-2.5 py-1.5 bg-[#f4f7fc] hover:bg-[#dceaff] text-[#171438] text-[11px] font-bold rounded-md flex items-center gap-1 cursor-pointer transition-colors"
                           onClick={() => {
                             setSelectedOfficer(off);
                             setShowDetailsModal(true);
@@ -261,7 +261,7 @@ export const PoliceOfficerVerificationQueue = () => {
                         {/* SECTION 60: SUSPEND APPROVED OFFICER */}
                         {off.status === 'APPROVED' && (
                           <button
-                            className="px-2.5 py-1.5 bg-amber-950 border border-amber-500 hover:bg-amber-900 text-amber-300 text-[11px] font-bold rounded-md flex items-center gap-1 cursor-pointer transition-colors"
+                            className="px-2.5 py-1.5 bg-amber-950 border border-[#fff0ca] hover:bg-amber-900 text-amber-300 text-[11px] font-bold rounded-md flex items-center gap-1 cursor-pointer transition-colors"
                             onClick={() => {
                               setSelectedOfficer(off);
                               setShowSuspendModal(true);
@@ -282,7 +282,7 @@ export const PoliceOfficerVerificationQueue = () => {
                         {/* SECTION 54: DEACTIVATE OFFICER */}
                         {off.status !== 'DEACTIVATED' && (
                           <button
-                            className="px-2.5 py-1.5 bg-slate-900 border border-slate-600 hover:bg-slate-800 text-slate-300 text-[11px] font-bold rounded-md flex items-center gap-1 cursor-pointer transition-colors"
+                            className="px-2.5 py-1.5 bg-white border border-[#dceaff] hover:bg-white shadow-sm text-[#424a6b] text-[11px] font-bold rounded-md flex items-center gap-1 cursor-pointer transition-colors"
                             onClick={() => handleUpdateStatus(off.id, 'DEACTIVATED')}>
                             <Power size={13} /> Deactivate
                           </button>
@@ -300,50 +300,50 @@ export const PoliceOfficerVerificationQueue = () => {
       {/* SECTION 53 & 64: POLICE ACCOUNT DETAILS SCREEN MODAL */}
       {showDetailsModal && selectedOfficer && (
         <div className="fixed inset-0 bg-black/85 flex items-center justify-center p-5 z-50">
-          <div className="bg-slate-800 rounded-2xl border border-slate-700 w-full max-w-2xl p-6 shadow-2xl space-y-4">
-            <div className="flex justify-between items-center pb-2 border-b border-slate-700">
-              <h3 className="text-base font-extrabold text-white flex items-center gap-2">
-                <UserCheck className="text-amber-400" size={20} />
+          <div className="bg-white shadow-sm rounded-2xl border border-[#e0e5f4] w-full max-w-2xl p-6 shadow-2xl space-y-4">
+            <div className="flex justify-between items-center pb-2 border-b border-[#e0e5f4]">
+              <h3 className="text-base font-extrabold text-[#090a23] flex items-center gap-2">
+                <UserCheck className="text-[#bd8100]" size={20} />
                 Police Account Details: {selectedOfficer.fullName}
               </h3>
-              <button className="text-slate-400 hover:text-white text-lg" onClick={() => setShowDetailsModal(false)}>✕</button>
+              <button className="text-[#596383] hover:text-[#090a23] text-lg" onClick={() => setShowDetailsModal(false)}>✕</button>
             </div>
 
             {/* SECTION 64: POLICE ACCOUNT DETAILS FIELDS */}
-            <div className="grid grid-cols-2 gap-3 bg-slate-900 p-4 rounded-xl border border-slate-800 text-xs">
-              <div><span className="text-slate-400">Full Name:</span> <strong className="text-white ml-1">{selectedOfficer.fullName}</strong></div>
-              <div><span className="text-slate-400">Employee ID:</span> <span className="font-mono text-indigo-300 font-extrabold ml-1">{selectedOfficer.employeeId}</span></div>
-              <div><span className="text-slate-400">Badge / Service Number:</span> <span className="font-mono text-amber-400 font-bold ml-1">{selectedOfficer.badgeNumber || 'SRV-9910'}</span></div>
-              <div><span className="text-slate-400">Rank & Station:</span> <span className="text-slate-200 font-bold ml-1">{selectedOfficer.rankDesignation} • {selectedOfficer.policeStation}</span></div>
-              <div><span className="text-slate-400">District & State:</span> <span className="text-slate-200 ml-1">{selectedOfficer.district}, {selectedOfficer.state}</span></div>
-              <div><span className="text-slate-400">Official Mobile:</span> <span className="text-slate-200 font-mono ml-1">{selectedOfficer.phone}</span></div>
-              <div><span className="text-slate-400">Official Email:</span> <span className="text-slate-200 ml-1">{selectedOfficer.email}</span></div>
-              <div><span className="text-slate-400">Account Status:</span> <span className="text-emerald-400 font-extrabold ml-1">{selectedOfficer.status || 'PENDING_APPROVAL'}</span></div>
-              <div><span className="text-slate-400">Approval History:</span> <span className="text-slate-300 ml-1">Approved by ADMIN-001 on {selectedOfficer.createdAt}</span></div>
-              <div><span className="text-slate-400">Last Login:</span> <span className="text-amber-400 font-bold ml-1">{selectedOfficer.lastLogin || 'Today, 09:15 AM'}</span></div>
-              <div className="col-span-2"><span className="text-slate-400">Registered Devices:</span> <span className="text-indigo-300 font-mono ml-1">{selectedOfficer.registeredDevice || 'Android Enforcer Tablet (ID: dev_9918)'}</span></div>
+            <div className="grid grid-cols-2 gap-3 bg-white p-4 rounded-xl border border-[#edf0fb] text-xs">
+              <div><span className="text-[#596383]">Full Name:</span> <strong className="text-[#090a23] ml-1">{selectedOfficer.fullName}</strong></div>
+              <div><span className="text-[#596383]">Employee ID:</span> <span className="font-mono text-indigo-300 font-extrabold ml-1">{selectedOfficer.employeeId}</span></div>
+              <div><span className="text-[#596383]">Badge / Service Number:</span> <span className="font-mono text-[#bd8100] font-bold ml-1">{selectedOfficer.badgeNumber || 'SRV-9910'}</span></div>
+              <div><span className="text-[#596383]">Rank & Station:</span> <span className="text-[#171438] font-bold ml-1">{selectedOfficer.rankDesignation} • {selectedOfficer.policeStation}</span></div>
+              <div><span className="text-[#596383]">District & State:</span> <span className="text-[#171438] ml-1">{selectedOfficer.district}, {selectedOfficer.state}</span></div>
+              <div><span className="text-[#596383]">Official Mobile:</span> <span className="text-[#171438] font-mono ml-1">{selectedOfficer.phone}</span></div>
+              <div><span className="text-[#596383]">Official Email:</span> <span className="text-[#171438] ml-1">{selectedOfficer.email}</span></div>
+              <div><span className="text-[#596383]">Account Status:</span> <span className="text-[#009963] font-extrabold ml-1">{selectedOfficer.status || 'PENDING_APPROVAL'}</span></div>
+              <div><span className="text-[#596383]">Approval History:</span> <span className="text-[#424a6b] ml-1">Approved by ADMIN-001 on {selectedOfficer.createdAt}</span></div>
+              <div><span className="text-[#596383]">Last Login:</span> <span className="text-[#bd8100] font-bold ml-1">{selectedOfficer.lastLogin || 'Today, 09:15 AM'}</span></div>
+              <div className="col-span-2"><span className="text-[#596383]">Registered Devices:</span> <span className="text-indigo-300 font-mono ml-1">{selectedOfficer.registeredDevice || 'Android Enforcer Tablet (ID: dev_9918)'}</span></div>
             </div>
 
             {/* SECTION 64: ACTIVITY & SECURITY METRICS GRID */}
             <div className="grid grid-cols-3 gap-3">
-              <div className="bg-slate-900 p-3 rounded-xl border border-slate-800 text-center">
-                <div className="text-[10px] font-bold text-slate-400">TOTAL CITIZEN SEARCHES</div>
-                <div className="text-xl font-black text-amber-400 mt-1">{selectedOfficer.totalSearches || 88}</div>
+              <div className="bg-white p-3 rounded-xl border border-[#edf0fb] text-center">
+                <div className="text-[10px] font-bold text-[#596383]">TOTAL CITIZEN SEARCHES</div>
+                <div className="text-xl font-black text-[#bd8100] mt-1">{selectedOfficer.totalSearches || 88}</div>
               </div>
 
-              <div className="bg-slate-900 p-3 rounded-xl border border-slate-800 text-center">
-                <div className="text-[10px] font-bold text-slate-400">DOCUMENT VIEWS</div>
-                <div className="text-xl font-black text-emerald-400 mt-1">{selectedOfficer.documentViews || 142}</div>
+              <div className="bg-white p-3 rounded-xl border border-[#edf0fb] text-center">
+                <div className="text-[10px] font-bold text-[#596383]">DOCUMENT VIEWS</div>
+                <div className="text-xl font-black text-[#009963] mt-1">{selectedOfficer.documentViews || 142}</div>
               </div>
 
-              <div className="bg-slate-900 p-3 rounded-xl border border-slate-800 text-center">
-                <div className="text-[10px] font-bold text-slate-400">SECURITY ALERTS</div>
-                <div className="text-xl font-black text-sky-400 mt-1">{selectedOfficer.securityAlerts || 0}</div>
+              <div className="bg-white p-3 rounded-xl border border-[#edf0fb] text-center">
+                <div className="text-[10px] font-bold text-[#596383]">SECURITY ALERTS</div>
+                <div className="text-xl font-black text-[#009df2] mt-1">{selectedOfficer.securityAlerts || 0}</div>
               </div>
             </div>
 
             <div className="flex justify-end gap-3 pt-2">
-              <button className="px-4 py-2 bg-slate-700 text-slate-200 text-xs font-bold rounded-xl" onClick={() => setShowDetailsModal(false)}>Close Account Details</button>
+              <button className="px-4 py-2 bg-[#f4f7fc] text-[#171438] text-xs font-bold rounded-xl" onClick={() => setShowDetailsModal(false)}>Close Account Details</button>
             </div>
           </div>
         </div>
@@ -352,36 +352,36 @@ export const PoliceOfficerVerificationQueue = () => {
       {/* SECTION 55: POLICE APPROVAL FLOW CONFIRMATION MODAL */}
       {showApproveModal && selectedOfficer && (
         <div className="fixed inset-0 bg-black/85 flex items-center justify-center p-5 z-50">
-          <div className="bg-slate-800 rounded-2xl border border-slate-700 w-full max-w-lg p-6 shadow-2xl space-y-4">
-            <div className="flex justify-between items-center pb-2 border-b border-slate-700">
-              <h3 className="text-base font-extrabold text-white flex items-center gap-2">
-                <ShieldCheck className="text-emerald-400" size={20} />
+          <div className="bg-white shadow-sm rounded-2xl border border-[#e0e5f4] w-full max-w-lg p-6 shadow-2xl space-y-4">
+            <div className="flex justify-between items-center pb-2 border-b border-[#e0e5f4]">
+              <h3 className="text-base font-extrabold text-[#090a23] flex items-center gap-2">
+                <ShieldCheck className="text-[#009963]" size={20} />
                 Approve Police Account?
               </h3>
-              <button className="text-slate-400 hover:text-white text-lg" onClick={() => setShowApproveModal(false)}>✕</button>
+              <button className="text-[#596383] hover:text-[#090a23] text-lg" onClick={() => setShowApproveModal(false)}>✕</button>
             </div>
 
-            <div className="bg-slate-900 rounded-xl p-4 space-y-2 border border-slate-800 text-xs">
+            <div className="bg-white rounded-xl p-4 space-y-2 border border-[#edf0fb] text-xs">
               <div className="flex justify-between">
-                <span className="text-slate-400 font-semibold">Officer Name:</span>
-                <strong className="text-white text-sm">Officer {selectedOfficer.fullName}</strong>
+                <span className="text-[#596383] font-semibold">Officer Name:</span>
+                <strong className="text-[#090a23] text-sm">Officer {selectedOfficer.fullName}</strong>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400 font-semibold">Employee ID:</span>
+                <span className="text-[#596383] font-semibold">Employee ID:</span>
                 <span className="font-mono text-indigo-300 font-extrabold">{selectedOfficer.employeeId}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400 font-semibold">Police Station:</span>
-                <span className="font-bold text-slate-200">{selectedOfficer.policeStation}</span>
+                <span className="text-[#596383] font-semibold">Police Station:</span>
+                <span className="font-bold text-[#171438]">{selectedOfficer.policeStation}</span>
               </div>
             </div>
 
-            <p className="text-xs text-slate-300 leading-relaxed italic">
+            <p className="text-xs text-[#424a6b] leading-relaxed italic">
               "By confirming, the officer account status will be set to APPROVED and police citizen lookup APIs will be unlocked for this officer."
             </p>
 
             <div className="flex justify-end gap-3 pt-2">
-              <button className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-bold rounded-xl" onClick={() => setShowApproveModal(false)}>Cancel</button>
+              <button className="px-4 py-2 bg-[#f4f7fc] hover:bg-[#dceaff] text-[#171438] text-xs font-bold rounded-xl" onClick={() => setShowApproveModal(false)}>Cancel</button>
               <button className="px-4 py-2 bg-emerald-700 hover:bg-emerald-600 text-white text-xs font-extrabold rounded-xl shadow-lg shadow-emerald-700/20" onClick={() => handleUpdateStatus(selectedOfficer.id, 'APPROVED')}>Approve Officer & Activate</button>
             </div>
           </div>
@@ -391,26 +391,26 @@ export const PoliceOfficerVerificationQueue = () => {
       {/* SECTION 58 & 59: REJECT POLICE OFFICER MODAL */}
       {showRejectModal && selectedOfficer && (
         <div className="fixed inset-0 bg-black/85 flex items-center justify-center p-5 z-50">
-          <div className="bg-slate-800 rounded-2xl border border-slate-700 w-full max-w-lg p-6 shadow-2xl space-y-4">
-            <div className="flex justify-between items-center pb-2 border-b border-slate-700">
-              <h3 className="text-base font-extrabold text-white flex items-center gap-2">
-                <X className="text-red-400" size={20} />
+          <div className="bg-white shadow-sm rounded-2xl border border-[#e0e5f4] w-full max-w-lg p-6 shadow-2xl space-y-4">
+            <div className="flex justify-between items-center pb-2 border-b border-[#e0e5f4]">
+              <h3 className="text-base font-extrabold text-[#090a23] flex items-center gap-2">
+                <X className="text-[#ef2547]" size={20} />
                 Reject Police Registration?
               </h3>
-              <button className="text-slate-400 hover:text-white text-lg" onClick={() => setShowRejectModal(false)}>✕</button>
+              <button className="text-[#596383] hover:text-[#090a23] text-lg" onClick={() => setShowRejectModal(false)}>✕</button>
             </div>
 
-            <div className="bg-slate-900 rounded-xl p-3 text-xs space-y-1">
-              <div className="text-slate-400">Target Officer: <strong className="text-white">{selectedOfficer.fullName}</strong></div>
-              <div className="text-slate-400">Employee ID: <span className="text-indigo-300 font-mono">{selectedOfficer.employeeId}</span></div>
+            <div className="bg-white rounded-xl p-3 text-xs space-y-1">
+              <div className="text-[#596383]">Target Officer: <strong className="text-[#090a23]">{selectedOfficer.fullName}</strong></div>
+              <div className="text-[#596383]">Employee ID: <span className="text-indigo-300 font-mono">{selectedOfficer.employeeId}</span></div>
             </div>
 
             <div>
-              <label className="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">
+              <label className="block text-[10px] font-black text-[#596383] uppercase tracking-wider mb-2">
                 SELECT REJECTION REASON *
               </label>
               <select
-                className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white text-xs font-bold outline-none"
+                className="w-full p-3 bg-white border border-[#e0e5f4] rounded-xl text-[#090a23] text-xs font-bold outline-none"
                 value={selectedRejectReason}
                 onChange={e => setSelectedRejectReason(e.target.value)}>
                 {OFFICER_REJECTION_REASONS.map(r => (
@@ -421,12 +421,12 @@ export const PoliceOfficerVerificationQueue = () => {
 
             {selectedRejectReason === 'Other' && (
               <div>
-                <label className="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">
+                <label className="block text-[10px] font-black text-[#596383] uppercase tracking-wider mb-2">
                   CUSTOM REJECTION REASON *
                 </label>
                 <input
                   type="text"
-                  className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white text-xs outline-none focus:border-indigo-500"
+                  className="w-full p-3 bg-white border border-[#e0e5f4] rounded-xl text-[#090a23] text-xs outline-none focus:border-[#6442ff]"
                   placeholder="Enter custom rejection reason..."
                   value={customRejectReason}
                   onChange={e => setCustomRejectReason(e.target.value)}
@@ -435,7 +435,7 @@ export const PoliceOfficerVerificationQueue = () => {
             )}
 
             <div className="flex justify-end gap-3 pt-2">
-              <button className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-bold rounded-xl" onClick={() => setShowRejectModal(false)}>Cancel</button>
+              <button className="px-4 py-2 bg-[#f4f7fc] hover:bg-[#dceaff] text-[#171438] text-xs font-bold rounded-xl" onClick={() => setShowRejectModal(false)}>Cancel</button>
               <button className="px-4 py-2 bg-red-700 hover:bg-red-600 text-white text-xs font-extrabold rounded-xl shadow-lg shadow-red-700/20" onClick={handleConfirmRejectOfficer}>Reject Officer</button>
             </div>
           </div>
@@ -445,26 +445,26 @@ export const PoliceOfficerVerificationQueue = () => {
       {/* SECTION 60: SUSPEND POLICE OFFICER MODAL */}
       {showSuspendModal && selectedOfficer && (
         <div className="fixed inset-0 bg-black/85 flex items-center justify-center p-5 z-50">
-          <div className="bg-slate-800 rounded-2xl border border-amber-700 w-full max-w-lg p-6 shadow-2xl space-y-4">
+          <div className="bg-white shadow-sm rounded-2xl border border-amber-700 w-full max-w-lg p-6 shadow-2xl space-y-4">
             <div className="flex justify-between items-center pb-2 border-b border-amber-800">
-              <h3 className="text-base font-extrabold text-amber-400 flex items-center gap-2">
-                <ShieldAlert className="text-amber-500" size={20} />
+              <h3 className="text-base font-extrabold text-[#bd8100] flex items-center gap-2">
+                <ShieldAlert className="text-[#bd8100]" size={20} />
                 Suspend Police Officer Account?
               </h3>
-              <button className="text-slate-400 hover:text-white text-lg" onClick={() => setShowSuspendModal(false)}>✕</button>
+              <button className="text-[#596383] hover:text-[#090a23] text-lg" onClick={() => setShowSuspendModal(false)}>✕</button>
             </div>
 
-            <div className="bg-slate-900 rounded-xl p-3 text-xs space-y-1 border border-amber-900/50">
-              <div className="text-slate-300">Target Officer: <strong className="text-white">{selectedOfficer.fullName}</strong></div>
-              <div className="text-slate-400">Employee ID: <span className="text-indigo-300 font-mono">{selectedOfficer.employeeId}</span></div>
+            <div className="bg-white rounded-xl p-3 text-xs space-y-1 border border-amber-900/50">
+              <div className="text-[#424a6b]">Target Officer: <strong className="text-[#090a23]">{selectedOfficer.fullName}</strong></div>
+              <div className="text-[#596383]">Employee ID: <span className="text-indigo-300 font-mono">{selectedOfficer.employeeId}</span></div>
             </div>
 
             <div>
-              <label className="block text-[10px] font-black text-amber-400 uppercase tracking-wider mb-2">
+              <label className="block text-[10px] font-black text-[#bd8100] uppercase tracking-wider mb-2">
                 SELECT SUSPENSION REASON *
               </label>
               <select
-                className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white text-xs font-bold outline-none"
+                className="w-full p-3 bg-white border border-[#e0e5f4] rounded-xl text-[#090a23] text-xs font-bold outline-none"
                 value={selectedSuspendReason}
                 onChange={e => setSelectedSuspendReason(e.target.value)}>
                 {OFFICER_SUSPENSION_REASONS.map(r => (
@@ -475,12 +475,12 @@ export const PoliceOfficerVerificationQueue = () => {
 
             {selectedSuspendReason === 'Other' && (
               <div>
-                <label className="block text-[10px] font-black text-amber-400 uppercase tracking-wider mb-2">
+                <label className="block text-[10px] font-black text-[#bd8100] uppercase tracking-wider mb-2">
                   CUSTOM SUSPENSION REASON *
                 </label>
                 <input
                   type="text"
-                  className="w-full p-3 bg-slate-900 border border-slate-700 rounded-xl text-white text-xs outline-none focus:border-amber-500"
+                  className="w-full p-3 bg-white border border-[#e0e5f4] rounded-xl text-[#090a23] text-xs outline-none focus:border-[#fff0ca]"
                   placeholder="Enter custom suspension reason..."
                   value={customSuspendReason}
                   onChange={e => setCustomSuspendReason(e.target.value)}
@@ -493,8 +493,8 @@ export const PoliceOfficerVerificationQueue = () => {
             </p>
 
             <div className="flex justify-end gap-3 pt-2">
-              <button className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs font-bold rounded-xl" onClick={() => setShowSuspendModal(false)}>Cancel</button>
-              <button className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-slate-950 text-xs font-black rounded-xl shadow-lg shadow-amber-600/30" onClick={handleConfirmSuspendOfficer}>Suspend Officer & Revoke Sessions</button>
+              <button className="px-4 py-2 bg-[#f4f7fc] hover:bg-[#dceaff] text-[#171438] text-xs font-bold rounded-xl" onClick={() => setShowSuspendModal(false)}>Cancel</button>
+              <button className="px-4 py-2 bg-amber-600 hover:bg-amber-500 text-[#ffffff] text-xs font-black rounded-xl shadow-lg shadow-amber-600/30" onClick={handleConfirmSuspendOfficer}>Suspend Officer & Revoke Sessions</button>
             </div>
           </div>
         </div>

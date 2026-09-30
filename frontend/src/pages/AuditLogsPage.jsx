@@ -130,7 +130,7 @@ export const AuditLogsPage = () => {
     if (role === 'POLICE_OFFICER') return 'bg-sky-950 text-sky-300 border border-sky-600/40';
     if (role === 'ADMIN') return 'bg-amber-950 text-amber-300 border border-amber-600/40';
     if (role === 'SYSTEM') return 'bg-emerald-950 text-emerald-300 border border-emerald-600/40';
-    return 'bg-indigo-950 text-indigo-300 border border-indigo-600/40';
+    return 'bg-[#6442ff] text-indigo-300 border border-indigo-600/40';
   };
 
   return (

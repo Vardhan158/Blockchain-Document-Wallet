@@ -30,7 +30,7 @@ function NavList({
         className={({ isActive }) =>
           `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
             isActive
-              ? 'bg-indigo-950 text-white border border-indigo-500 shadow-md shadow-indigo-500/10'
+              ? 'bg-[#6442ff] text-white border border-indigo-500 shadow-md shadow-indigo-500/10'
               : 'text-[#596383] hover:bg-[#f4f7fc] hover:text-[#090a23]'
           }`
         }>
@@ -45,7 +45,7 @@ function NavList({
         className={({ isActive }) =>
           `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
             isActive
-              ? 'bg-indigo-950 text-white border border-indigo-500 shadow-md shadow-indigo-500/10'
+              ? 'bg-[#6442ff] text-white border border-indigo-500 shadow-md shadow-indigo-500/10'
               : 'text-[#596383] hover:bg-[#f4f7fc] hover:text-[#090a23]'
           }`
         }>
@@ -65,7 +65,7 @@ function NavList({
         className={({ isActive }) =>
           `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
             isActive
-              ? 'bg-indigo-950 text-white border border-indigo-500 shadow-md shadow-indigo-500/10'
+              ? 'bg-[#6442ff] text-white border border-indigo-500 shadow-md shadow-indigo-500/10'
               : 'text-[#596383] hover:bg-[#f4f7fc] hover:text-[#090a23]'
           }`
         }>
@@ -85,7 +85,7 @@ function NavList({
         className={({ isActive }) =>
           `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
             isActive
-              ? 'bg-indigo-950 text-white border border-indigo-500 shadow-md shadow-indigo-500/10'
+              ? 'bg-[#6442ff] text-white border border-indigo-500 shadow-md shadow-indigo-500/10'
               : 'text-[#596383] hover:bg-[#f4f7fc] hover:text-[#090a23]'
           }`
         }>
@@ -100,7 +100,7 @@ function NavList({
         className={({ isActive }) =>
           `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
             isActive
-              ? 'bg-indigo-950 text-white border border-indigo-500 shadow-md shadow-indigo-500/10'
+              ? 'bg-[#6442ff] text-white border border-indigo-500 shadow-md shadow-indigo-500/10'
               : 'text-[#596383] hover:bg-[#f4f7fc] hover:text-[#090a23]'
           }`
         }>
@@ -115,7 +115,7 @@ function NavList({
         className={({ isActive }) =>
           `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
             isActive
-              ? 'bg-indigo-950 text-white border border-indigo-500 shadow-md shadow-indigo-500/10'
+              ? 'bg-[#6442ff] text-white border border-indigo-500 shadow-md shadow-indigo-500/10'
               : 'text-[#596383] hover:bg-[#f4f7fc] hover:text-[#090a23]'
           }`
         }>
@@ -130,7 +130,7 @@ function NavList({
         className={({ isActive }) =>
           `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-bold transition-all ${
             isActive
-              ? 'bg-indigo-950 text-white border border-indigo-500 shadow-md shadow-indigo-500/10'
+              ? 'bg-[#6442ff] text-white border border-indigo-500 shadow-md shadow-indigo-500/10'
               : 'text-[#596383] hover:bg-[#f4f7fc] hover:text-[#090a23]'
           }`
         }>

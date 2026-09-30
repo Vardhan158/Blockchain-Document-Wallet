@@ -37,7 +37,7 @@ function NavigationMenu({
         className={({ isActive }) =>
           `flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all ${
             isActive
-              ? 'bg-indigo-950 text-white border border-indigo-500 font-extrabold shadow-sm'
+              ? 'bg-[#6442ff] text-white border border-indigo-500 font-extrabold shadow-sm'
               : 'text-[#596383] hover:bg-[#f4f7fc] hover:text-[#090a23]'
           }`
         }>
@@ -102,7 +102,7 @@ function NavigationMenu({
           className={({ isActive }) =>
             `flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all ${
               isActive
-                ? 'bg-indigo-950 text-white border border-indigo-500 font-extrabold shadow-sm'
+                ? 'bg-[#6442ff] text-white border border-indigo-500 font-extrabold shadow-sm'
                 : 'text-[#596383] hover:bg-[#f4f7fc] hover:text-[#090a23]'
             }`
           }>
@@ -168,7 +168,7 @@ function NavigationMenu({
           className={({ isActive }) =>
             `flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all ${
               isActive
-                ? 'bg-indigo-950 text-white border border-indigo-500 font-extrabold shadow-sm'
+                ? 'bg-[#6442ff] text-white border border-indigo-500 font-extrabold shadow-sm'
                 : 'text-[#596383] hover:bg-[#f4f7fc] hover:text-[#090a23]'
             }`
           }>
@@ -185,7 +185,7 @@ function NavigationMenu({
           className={({ isActive }) =>
             `flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all ${
               isActive
-                ? 'bg-indigo-950 text-white border border-indigo-500 font-extrabold shadow-sm'
+                ? 'bg-[#6442ff] text-white border border-indigo-500 font-extrabold shadow-sm'
                 : 'text-[#596383] hover:bg-[#f4f7fc] hover:text-[#090a23]'
             }`
           }>
@@ -202,7 +202,7 @@ function NavigationMenu({
           className={({ isActive }) =>
             `flex items-center gap-3 px-3.5 py-2.5 rounded-xl transition-all ${
               isActive
-                ? 'bg-indigo-950 text-white border border-indigo-500 font-extrabold shadow-sm'
+                ? 'bg-[#6442ff] text-white border border-indigo-500 font-extrabold shadow-sm'
                 : 'text-[#596383] hover:bg-[#f4f7fc] hover:text-[#090a23]'
             }`
           }>

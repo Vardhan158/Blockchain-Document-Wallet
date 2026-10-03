@@ -41,15 +41,15 @@ const labels: Record<string, string> = {
 function CurvedTabBarBackground({ height }: { height: number }) {
   const { width } = useWindowDimensions();
   const c = width / 2;
-  const r = 46; // Curve cutout half-width
-  const depth = 32; // Deep, pronounced curve cutout
+  const r = 52; // Wide, spacious cutout half-width
+  const depth = 38; // Deep curve dipping low down
 
   const d = `
     M 0,20
     Q 0,0 20,0
     L ${c - r},0
-    C ${c - r + 20},0 ${c - 22},${depth} ${c},${depth}
-    C ${c + 22},${depth} ${c + r - 20},0 ${c + r},0
+    C ${c - r + 22},0 ${c - 24},${depth} ${c},${depth}
+    C ${c + 24},${depth} ${c + r - 22},0 ${c + r},0
     L ${width - 20},0
     Q ${width},0 ${width},20
     L ${width},${height}
@@ -222,19 +222,19 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   uploadFab: {
-    width: 58,
-    height: 58,
-    borderRadius: 29,
+    width: 52,
+    height: 52,
+    borderRadius: 26,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
     marginTop: -28,
     shadowColor: '#5331f2',
-    shadowOffset: { width: 0, height: 7 },
-    shadowOpacity: 0.42,
-    shadowRadius: 12,
-    elevation: 10,
-    borderWidth: 4,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.38,
+    shadowRadius: 10,
+    elevation: 8,
+    borderWidth: 3,
     borderColor: '#ffffff',
   },
 });

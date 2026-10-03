@@ -140,9 +140,11 @@ function VaultTabBar({ state, navigation }: BottomTabBarProps) {
   );
 }
 
+const renderTabBar = (props: BottomTabBarProps) => <VaultTabBar {...props} />;
+
 export const MainTabNavigator: React.FC = () => (
   <Tab.Navigator
-    tabBar={VaultTabBar}
+    tabBar={renderTabBar}
     screenOptions={{ headerShown: false }}>
     <Tab.Screen name="Home" component={HomeScreen} />
     <Tab.Screen name="Documents" component={DocumentsScreen} />

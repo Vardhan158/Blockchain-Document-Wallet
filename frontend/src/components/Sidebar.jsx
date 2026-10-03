@@ -145,7 +145,7 @@ function NavList({
           onClick={onNavigate}
           className={({ isActive }) =>
             `flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium transition-colors ${
-              isActive ? 'text-white bg-white font-bold' : 'text-[#596383] hover:text-[#171438] hover:bg-[#f4f7fc]/50'
+              isActive ? 'text-white bg-[#6442ff] font-extrabold shadow-sm' : 'text-[#596383] hover:text-[#171438] hover:bg-[#f4f7fc]/50'
             }`
           }>
           <Shield size={16} className="text-[#596383] flex-shrink-0" />
@@ -157,7 +157,7 @@ function NavList({
           onClick={onNavigate}
           className={({ isActive }) =>
             `flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium transition-colors ${
-              isActive ? 'text-white bg-white font-bold' : 'text-[#596383] hover:text-[#171438] hover:bg-[#f4f7fc]/50'
+              isActive ? 'text-white bg-[#6442ff] font-extrabold shadow-sm' : 'text-[#596383] hover:text-[#171438] hover:bg-[#f4f7fc]/50'
             }`
           }>
           <Settings size={16} className="text-[#596383] flex-shrink-0" />
@@ -169,7 +169,7 @@ function NavList({
           onClick={onNavigate}
           className={({ isActive }) =>
             `flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs font-medium transition-colors ${
-              isActive ? 'text-white bg-white font-bold' : 'text-[#596383] hover:text-[#171438] hover:bg-[#f4f7fc]/50'
+              isActive ? 'text-white bg-[#6442ff] font-extrabold shadow-sm' : 'text-[#596383] hover:text-[#171438] hover:bg-[#f4f7fc]/50'
             }`
           }>
           <User size={16} className="text-[#596383] flex-shrink-0" />

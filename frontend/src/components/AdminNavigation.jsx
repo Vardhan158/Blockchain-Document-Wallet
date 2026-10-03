@@ -218,7 +218,7 @@ function NavigationMenu({
           onClick={onNavigate}
           className={({ isActive }) =>
             `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition-colors ${
-              isActive ? 'text-white bg-white font-bold' : 'text-[#596383] hover:text-[#171438]'
+              isActive ? 'text-white bg-[#6442ff] font-extrabold shadow-sm' : 'text-[#596383] hover:text-[#171438]'
             }`
           }>
           <Shield size={16} className="flex-shrink-0" />
@@ -230,7 +230,7 @@ function NavigationMenu({
           onClick={onNavigate}
           className={({ isActive }) =>
             `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition-colors ${
-              isActive ? 'text-white bg-white font-bold' : 'text-[#596383] hover:text-[#171438]'
+              isActive ? 'text-white bg-[#6442ff] font-extrabold shadow-sm' : 'text-[#596383] hover:text-[#171438]'
             }`
           }>
           <Settings size={16} className="flex-shrink-0" />
@@ -242,7 +242,7 @@ function NavigationMenu({
           onClick={onNavigate}
           className={({ isActive }) =>
             `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs transition-colors ${
-              isActive ? 'text-white bg-white font-bold' : 'text-[#596383] hover:text-[#171438]'
+              isActive ? 'text-white bg-[#6442ff] font-extrabold shadow-sm' : 'text-[#596383] hover:text-[#171438]'
             }`
           }>
           <User size={16} className="flex-shrink-0" />

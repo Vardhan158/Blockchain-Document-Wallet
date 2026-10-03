@@ -76,9 +76,9 @@ export class FirebaseService {
         },
       };
 
-      const message: Message = fcmTokenOrTopic.startsWith('/topics/') || !fcmTokenOrTopic.startsWith('fcm_')
+      const message: Message = fcmTokenOrTopic.startsWith('/topics/')
         ? {
-            topic: 'all_users',
+            topic: fcmTokenOrTopic.replace(/^\/topics\//, ''),
             notification: { title, body },
             data: data || {},
             android: androidConfig,

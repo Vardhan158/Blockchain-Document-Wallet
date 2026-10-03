@@ -1,10 +1,52 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StatusBar, StyleSheet, View } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { getInitialNotification, getMessaging, onNotificationOpenedApp, onTokenRefresh } from '@react-native-firebase/messaging';
 import { RootNavigator } from './src/navigation/RootNavigator';
 import { VaultTheme } from './src/theme/theme';
+import { useAuthStore } from './src/store/useAuthStore';
+import { listenForForegroundPushNotifications, registerDeviceForPushNotifications } from './src/services/pushNotificationService';
+import { requestNotificationPermission } from './src/services/systemNotificationService';
+import { openNotificationDestination } from './src/navigation/notificationNavigation';
 
 function App() {
+  const user = useAuthStore(state => state.user);
+
+  useEffect(() => {
+    const unsubscribeForeground = listenForForegroundPushNotifications();
+    const unsubscribeTokenRefresh = onTokenRefresh(getMessaging(), () => {
+      if (user) registerDeviceForPushNotifications().catch(error => console.warn('Unable to refresh FCM device token', error));
+    });
+    return () => {
+      unsubscribeForeground();
+      unsubscribeTokenRefresh();
+    };
+  }, [user]);
+
+  useEffect(() => {
+    const messaging = getMessaging();
+    const unsubscribeNotificationOpen = onNotificationOpenedApp(messaging, openNotificationDestination);
+
+    // Covers a tap that launched the application from a terminated state.
+    getInitialNotification(messaging)
+      .then(message => {
+        if (message) openNotificationDestination(message);
+      })
+      .catch(error => console.warn('Unable to read initial notification', error));
+
+    return unsubscribeNotificationOpen;
+  }, []);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const register = async () => {
+      const granted = await requestNotificationPermission();
+      if (granted) await registerDeviceForPushNotifications();
+    };
+    register().catch(error => console.warn('Unable to register device for push notifications', error));
+  }, [user]);
+
   return (
     <SafeAreaProvider>
       <StatusBar

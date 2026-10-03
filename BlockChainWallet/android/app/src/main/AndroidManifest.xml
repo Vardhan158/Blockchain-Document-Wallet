@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -23,7 +24,8 @@
       <!-- High Priority Firebase FCM Notification Channel for Status Bar Dropdown Alerts -->
       <meta-data
           android:name="com.google.firebase.messaging.default_notification_channel_id"
-          android:value="high_priority_notifications" />
+          android:value="high_priority_notifications"
+          tools:replace="android:value" />
 
       <activity
         android:name=".MainActivity"

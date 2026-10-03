@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { RootStackParamList } from '../types/navigation';
@@ -9,14 +9,19 @@ import { DocumentDetailsScreen } from '../screens/DocumentDetailsScreen';
 import { UserIdScreen } from '../screens/UserIdScreen';
 import { useAuthStore } from '../store/useAuthStore';
 import { VaultTheme } from '../theme/theme';
+import { navigationRef, openPendingNotificationDestination } from './notificationNavigation';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const RootNavigator: React.FC = () => {
   const token = useAuthStore(state => state.token);
 
+  useEffect(() => {
+    if (token) openPendingNotificationDestination();
+  }, [token]);
+
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef} onReady={openPendingNotificationDestination}>
       <Stack.Navigator
         screenOptions={{
           headerShown: false,

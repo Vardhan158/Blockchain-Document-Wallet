@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
@@ -11,10 +11,12 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../types/navigation';
 import { useAuthStore } from '../store/useAuthStore';
 import { GradientSurface, VaultIcon } from '../components/DashboardArtwork';
+import { User } from '../types/models';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'Login'>;
 
@@ -22,8 +24,20 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [savedUser, setSavedUser] = useState<User | null>(null);
 
-  const { login, isLoading, error, clearError } = useAuthStore();
+  const { login, initAuth, isLoading, error, clearError } = useAuthStore();
+
+  useEffect(() => {
+    AsyncStorage.getItem('auth_user').then(value => {
+      if (value) setSavedUser(JSON.parse(value));
+    }).catch(() => {});
+  }, []);
+
+  const handleBiometricUnlock = async () => {
+    const unlocked = await initAuth();
+    if (!unlocked) Alert.alert('Unlock not completed', 'Use your password below to sign in.');
+  };
 
   const handleLogin = async () => {
     if (!email.trim() || !password) {
@@ -44,7 +58,7 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.screen}
     >
-      <View style={styles.glow}>
+      <View style={styles.dashboardGlow}>
         <GradientSurface colors={['#b7a3ff', '#c4d2ff', '#d9fbff']} />
       </View>
       <ScrollView
@@ -62,22 +76,47 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
         </TouchableOpacity>
 
         {/* Logo & Header */}
-        <View style={styles.header}>
+        <View style={styles.dashboardHeader}>
           <View style={styles.logo}>
             <GradientSurface colors={['#6e40ff', '#4a35d9', '#3349dc']} />
             <VaultIcon name="shield" color="white" size={32} />
           </View>
-          <View>
+          <View style={styles.dashboardBrand}>
             <Text style={styles.brand}>VAULT / ID</Text>
-            <Text style={styles.subtitle}>Sign In to Digital Vault</Text>
+            <Text style={styles.subtitle}>Digital Document Vault</Text>
+          </View>
+          <View style={styles.loginAvatar}>
+            <Text style={styles.loginAvatarText}>{savedUser?.fullName?.charAt(0).toUpperCase() || 'U'}</Text>
           </View>
         </View>
 
-        {/* Welcome Back & Description */}
-        <Text style={styles.welcomeHeading}>Welcome Back</Text>
-        <Text style={styles.intro}>
-          Enter your email and password to access your{'\n'}blockchain document wallet.
-        </Text>
+        <View style={styles.dashboardHero}>
+          <Text style={styles.dashboardEyebrow}>SECURE WALLET ACCESS</Text>
+          <Text style={styles.welcomeHeading}>Welcome back{savedUser ? `, ${savedUser.fullName.split(' ')[0]}` : ''}</Text>
+          <Text style={styles.intro}>Unlock your digital identity and documents securely.</Text>
+        </View>
+
+        <View style={styles.savedWalletCard}>
+          <GradientSurface />
+          <View style={styles.savedWalletIcon}><VaultIcon name="shield" color="#6d50ff" size={23} /></View>
+          <View style={styles.savedWalletText}>
+            <Text style={styles.savedWalletLabel}>SAVED WALLET</Text>
+            <Text numberOfLines={1} style={styles.savedWalletName}>{savedUser?.fullName || 'Your secure session'}</Text>
+            <Text numberOfLines={1} style={styles.savedWalletEmail}>{savedUser?.email || 'Sign in once to enable biometric unlock'}</Text>
+          </View>
+          <View style={styles.verifiedPill}><VaultIcon name="check" color="#55ffd5" size={14} /><Text style={styles.verifiedPillText}>SECURE</Text></View>
+        </View>
+
+        <TouchableOpacity accessibilityRole="button" accessibilityLabel="Unlock with fingerprint" disabled={isLoading} style={[styles.biometricCard, isLoading && styles.disabled]} onPress={handleBiometricUnlock}>
+          <View style={styles.fingerprintCircle}><VaultIcon name="shield" color="#6542ff" size={32} /></View>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.biometricTitle}>{isLoading ? 'Authenticating…' : 'Unlock with Fingerprint'}</Text>
+            <Text style={styles.biometricSubtitle}>Use your enrolled biometric or device lock</Text>
+          </View>
+          {isLoading ? <ActivityIndicator color="#6542ff" /> : <VaultIcon name="chevron" color="#6542ff" size={21} />}
+        </TouchableOpacity>
+
+        <View style={styles.orRow}><View style={styles.orLine} /><Text style={styles.orText}>OR SIGN IN WITH PASSWORD</Text><View style={styles.orLine} /></View>
 
         {/* Form Container Card */}
         <View style={styles.card}>
@@ -199,6 +238,28 @@ function Field({
 
 const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: '#FAF2F8' },
+  dashboardGlow: { position: 'absolute', top: 0, left: 0, right: 0, height: 270 },
+  dashboardHeader: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 18 },
+  dashboardBrand: { flex: 1 },
+  loginAvatar: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#fff', borderWidth: 2, borderColor: '#e5e0ff', alignItems: 'center', justifyContent: 'center' },
+  loginAvatarText: { color: '#6542ff', fontWeight: '900', fontSize: 17 },
+  dashboardHero: { marginTop: 4 },
+  dashboardEyebrow: { color: '#6242ff', fontSize: 10, fontWeight: '900', letterSpacing: 1.2, textAlign: 'center' },
+  savedWalletCard: { minHeight: 100, borderRadius: 22, overflow: 'hidden', padding: 17, flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 14 },
+  savedWalletIcon: { width: 46, height: 46, borderRadius: 16, alignItems: 'center', justifyContent: 'center', backgroundColor: '#fff' },
+  savedWalletText: { flex: 1 },
+  savedWalletLabel: { color: '#d9d2ff', fontSize: 9, fontWeight: '900', letterSpacing: 1 },
+  savedWalletName: { color: '#fff', fontSize: 16, fontWeight: '900', marginTop: 4 },
+  savedWalletEmail: { color: '#e5e1ff', fontSize: 11, marginTop: 3 },
+  verifiedPill: { flexDirection: 'row', alignItems: 'center', gap: 3, alignSelf: 'flex-start', paddingHorizontal: 7, paddingVertical: 4, borderRadius: 10, backgroundColor: 'rgba(255,255,255,0.14)' },
+  verifiedPillText: { color: '#55ffd5', fontSize: 8, fontWeight: '900' },
+  biometricCard: { backgroundColor: '#fff', borderRadius: 22, padding: 16, flexDirection: 'row', alignItems: 'center', gap: 13, borderWidth: 1, borderColor: '#e6e0ff', shadowColor: '#6040ff', shadowOpacity: 0.12, shadowRadius: 12, shadowOffset: { width: 0, height: 5 }, elevation: 4 },
+  fingerprintCircle: { width: 56, height: 56, borderRadius: 20, alignItems: 'center', justifyContent: 'center', backgroundColor: '#f0edff' },
+  biometricTitle: { color: '#161235', fontSize: 16, fontWeight: '900' },
+  biometricSubtitle: { color: '#75809a', fontSize: 11, marginTop: 4 },
+  orRow: { flexDirection: 'row', alignItems: 'center', gap: 9, marginVertical: 20 },
+  orLine: { flex: 1, height: 1, backgroundColor: '#dfe3ec' },
+  orText: { color: '#8490a7', fontSize: 9, fontWeight: '900', letterSpacing: 0.5 },
   glow: { position: 'absolute', top: 0, left: 0, right: 0, height: 220 },
   content: { padding: 22, paddingTop: 44, paddingBottom: 30 },
   back: {

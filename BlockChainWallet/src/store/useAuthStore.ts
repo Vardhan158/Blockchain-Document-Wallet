@@ -109,15 +109,6 @@ export const useAuthStore = create<AuthState>((set, _get) => ({
 
         set({ token: activeAccess, user, isLoading: false });
 
-        // Section 44: Auto-register Device Token for Push Notifications
-        try {
-          await api.post('/devices/register', {
-            fcmToken: `fcm_device_token_${user.userId || 'vault'}`,
-          });
-        } catch (devErr) {
-          // Ignore
-        }
-
         return { success: true };
       }
       set({ isLoading: false });
@@ -165,15 +156,6 @@ export const useAuthStore = create<AuthState>((set, _get) => ({
         await AsyncStorage.setItem('auth_user', JSON.stringify(user));
 
         set({ token: activeAccess, user, isLoading: false });
-
-        // Section 44: Auto-register Device Token for Push Notifications
-        try {
-          await api.post('/v1/devices/register', {
-            fcmToken: `fcm_device_token_${user.userId || 'vault'}`,
-          });
-        } catch (devErr) {
-          // Ignore
-        }
 
         return { success: true, userId: user.userId };
       }

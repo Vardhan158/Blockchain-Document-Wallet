@@ -21,7 +21,8 @@ import { useAuthStore } from '../store/useAuthStore';
 import { useNotificationStore } from '../store/useNotificationStore';
 import { DocumentType, ApprovedTag } from '../types/models';
 import { VaultLogo } from '../components/VaultLogo';
-import { VaultFolder } from '../components/DashboardArtwork';
+import { GradientSurface, VaultFolder } from '../components/DashboardArtwork';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { pick, types as docTypes, isErrorWithCode, errorCodes } from '@react-native-documents/picker';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 
@@ -101,6 +102,7 @@ const requestCameraPermission = async (): Promise<boolean> => {
 export const UploadScreen: React.FC<Props> = ({ navigation }) => {
   const user = useAuthStore(state => state.user);
   const { unreadCount } = useNotificationStore();
+  const insets = useSafeAreaInsets();
 
   const [isOffline, setIsOffline] = useState(false);
   const [selectedDocType, setSelectedDocType] = useState<DocumentType | null>(null);
@@ -346,9 +348,12 @@ export const UploadScreen: React.FC<Props> = ({ navigation }) => {
   const currentTypeItem = DOCUMENT_TYPES.find(d => d.value === selectedDocType);
 
   return (
-    <View style={tw`flex-1 bg-[#FAF2F8]/20`}>
+    <View style={tw`flex-1 bg-[#fafbff]`}>
+      <View style={[tw`absolute top-0 left-0 right-0`, { height: insets.top + 160 }]}>
+        <GradientSurface colors={['#b2a1ff', '#bccbff', '#cef8fb']} />
+      </View>
       {/* Top Fixed Header Bar */}
-      <View style={tw`h-15 bg-white flex-row items-center justify-between px-4 border-b border-slate-100 shadow-sm`}>
+      <View style={[tw`flex-row items-center justify-between px-4`, { paddingTop: insets.top + 16, paddingBottom: 16 }]}>
         <VaultLogo size="sm" subtitle="Upload Flow" />
         <View style={tw`flex-row items-center gap-2`}>
           <TouchableOpacity
@@ -368,8 +373,8 @@ export const UploadScreen: React.FC<Props> = ({ navigation }) => {
       </View>
 
       <ScrollView
-        style={tw`flex-1`}
-        contentContainerStyle={tw`p-4.5 pb-12`}
+        style={[tw`flex-1 bg-[#fafbfff5] overflow-hidden`, { borderTopLeftRadius: 32, borderTopRightRadius: 32 }]}
+        contentContainerStyle={tw`p-4.5 pt-5 pb-12`}
         showsVerticalScrollIndicator={false}>
         {/* Header Title with 3D Artwork */}
         <View style={tw`flex-row justify-between items-center mb-5`}>

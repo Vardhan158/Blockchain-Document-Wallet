@@ -512,8 +512,9 @@ const s = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 24,
     backgroundColor: '#fafbfff5',
-    borderTopLeftRadius: 30,
-    borderTopRightRadius: 30,
+    borderTopLeftRadius: 32,
+    borderTopRightRadius: 32,
+    overflow: 'hidden',
   },
   header: { flexDirection: 'row', alignItems: 'center', gap: 9 },
   logo: {

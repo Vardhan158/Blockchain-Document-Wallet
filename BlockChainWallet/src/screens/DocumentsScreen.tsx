@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   RefreshControl,
   StyleSheet,
-  useWindowDimensions,
   ScrollView,
 } from 'react-native';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';

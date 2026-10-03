@@ -38,22 +38,25 @@ const labels: Record<string, string> = {
   Profile: 'Profile',
 };
 
-function CurvedTabBarBackground({ height }: { height: number }) {
-  const { width } = useWindowDimensions();
+function CurvedTabBarBackground({ height, width }: { height: number; width: number }) {
   const c = width / 2;
-  const r = 44; // Notch cutout half-width
-  const depth = 34; // Deep U-notch cutout
+  const r = 40; // Curve cutout half-width
+  const depth = 28; // Concave dip depth
+  const cr = 28; // Pill outer corner radius
 
   const d = `
-    M 0,20
-    Q 0,0 20,0
+    M ${cr},0
     L ${c - r},0
     C ${c - r + 18},0 ${c - 20},${depth} ${c},${depth}
     C ${c + 20},${depth} ${c + r - 18},0 ${c + r},0
-    L ${width - 20},0
-    Q ${width},0 ${width},16
-    L ${width},${height}
-    L 0,${height}
+    L ${width - cr},0
+    Q ${width},0 ${width},${cr}
+    L ${width},${height - cr}
+    Q ${width},${height} ${width - cr},${height}
+    L ${cr},${height}
+    Q 0,${height} 0,${height - cr}
+    L 0,${cr}
+    Q 0,0 ${cr},0
     Z
   `;
 
@@ -63,8 +66,8 @@ function CurvedTabBarBackground({ height }: { height: number }) {
         <Path
           d={d}
           fill="#ffffff"
-          stroke="#d2d7e8"
-          strokeWidth={1.8}
+          stroke="#dbe3f7"
+          strokeWidth={1.5}
         />
       </Svg>
     </View>
@@ -73,73 +76,79 @@ function CurvedTabBarBackground({ height }: { height: number }) {
 
 function VaultTabBar({ state, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
-  const barHeight = 58 + Math.max(insets.bottom, 10);
+  const { width } = useWindowDimensions();
+
+  const pillWidth = width - 32; // 16px margin on left and right
+  const pillHeight = 64;
+  const bottomMargin = Math.max(insets.bottom, 12);
 
   return (
-    <View style={[styles.container, { height: barHeight }]}>
-      <CurvedTabBarBackground height={barHeight} />
+    <View style={[styles.outerContainer, { bottom: bottomMargin, paddingHorizontal: 16 }]}>
+      <View style={[styles.pillContainer, { width: pillWidth, height: pillHeight }]}>
+        <CurvedTabBarBackground width={pillWidth} height={pillHeight} />
 
-      <View style={[styles.tabRow, { paddingBottom: Math.max(insets.bottom, 6) }]}>
-        {state.routes.map((route, index) => {
-          const focused = state.index === index;
-          const isUpload = route.name === 'Upload';
+        <View style={styles.tabRow}>
+          {state.routes.map((route, index) => {
+            const focused = state.index === index;
+            const isUpload = route.name === 'Upload';
 
-          const onPress = () => {
-            const event = navigation.emit({
-              type: 'tabPress',
-              target: route.key,
-              canPreventDefault: true,
-            });
-            if (!focused && !event.defaultPrevented) {
-              navigation.navigate(route.name);
+            const onPress = () => {
+              const event = navigation.emit({
+                type: 'tabPress',
+                target: route.key,
+                canPreventDefault: true,
+              });
+              if (!focused && !event.defaultPrevented) {
+                navigation.navigate(route.name);
+              }
+            };
+
+            const onLongPress = () => {
+              navigation.emit({ type: 'tabLongPress', target: route.key });
+            };
+
+            if (isUpload) {
+              return (
+                <TouchableOpacity
+                  accessibilityRole="button"
+                  accessibilityLabel="Upload document"
+                  key={route.key}
+                  style={styles.uploadTabContainer}
+                  onPress={onPress}
+                  onLongPress={onLongPress}
+                  activeOpacity={0.88}>
+                  <View style={styles.uploadFab}>
+                    <GradientSurface colors={['#7f53ff', '#5a38ff', '#3d25e6']} />
+                    <VaultIcon name="plus" size={26} color="white" />
+                  </View>
+                </TouchableOpacity>
+              );
             }
-          };
 
-          const onLongPress = () => {
-            navigation.emit({ type: 'tabLongPress', target: route.key });
-          };
-
-          if (isUpload) {
             return (
               <TouchableOpacity
-                accessibilityRole="button"
-                accessibilityLabel="Upload document"
+                accessibilityRole="tab"
+                accessibilityLabel={labels[route.name]}
+                accessibilityState={{ selected: focused }}
                 key={route.key}
-                style={styles.uploadTabContainer}
+                style={styles.tab}
                 onPress={onPress}
-                onLongPress={onLongPress}
-                activeOpacity={0.88}>
-                <View style={styles.uploadFab}>
-                  <GradientSurface colors={['#7f53ff', '#5a38ff', '#3d25e6']} />
-                  <VaultIcon name="plus" size={26} color="white" />
+                onLongPress={onLongPress}>
+                <View style={styles.iconContainer}>
+                  <VaultIcon
+                    name={icons[route.name]}
+                    size={22}
+                    color={focused ? '#6242ff' : '#858da7'}
+                  />
                 </View>
+                <Text style={[styles.label, focused && styles.activeLabel]}>
+                  {labels[route.name]}
+                </Text>
+                <View style={[styles.dot, focused && styles.activeDot]} />
               </TouchableOpacity>
             );
-          }
-
-          return (
-            <TouchableOpacity
-              accessibilityRole="tab"
-              accessibilityLabel={labels[route.name]}
-              accessibilityState={{ selected: focused }}
-              key={route.key}
-              style={styles.tab}
-              onPress={onPress}
-              onLongPress={onLongPress}>
-              <View style={styles.iconContainer}>
-                <VaultIcon
-                  name={icons[route.name]}
-                  size={22}
-                  color={focused ? '#6242ff' : '#858da7'}
-                />
-              </View>
-              <Text style={[styles.label, focused && styles.activeLabel]}>
-                {labels[route.name]}
-              </Text>
-              <View style={[styles.dot, focused && styles.activeDot]} />
-            </TouchableOpacity>
-          );
-        })}
+          })}
+        </View>
       </View>
     </View>
   );
@@ -160,11 +169,15 @@ export const MainTabNavigator: React.FC = () => (
 );
 
 const styles = StyleSheet.create({
-  container: {
+  outerContainer: {
     position: 'absolute',
     left: 0,
     right: 0,
-    bottom: 0,
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+  },
+  pillContainer: {
+    position: 'relative',
     backgroundColor: 'transparent',
   },
   svgWrapper: {
@@ -173,10 +186,10 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     top: 0,
-    shadowColor: '#535694',
-    shadowOffset: { width: 0, height: -5 },
+    shadowColor: '#3d447a',
+    shadowOffset: { width: 0, height: 8 },
     shadowOpacity: 0.12,
-    shadowRadius: 12,
+    shadowRadius: 16,
     elevation: 10,
   },
   tabRow: {
@@ -188,7 +201,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 4,
+    paddingTop: 2,
   },
   iconContainer: {
     height: 24,
@@ -222,9 +235,9 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   uploadFab: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 54,
+    height: 54,
+    borderRadius: 27,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',

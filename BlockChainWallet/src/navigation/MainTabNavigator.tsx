@@ -41,17 +41,17 @@ const labels: Record<string, string> = {
 function CurvedTabBarBackground({ height }: { height: number }) {
   const { width } = useWindowDimensions();
   const c = width / 2;
-  const r = 52; // Wide, spacious cutout half-width
-  const depth = 38; // Deep curve dipping low down
+  const r = 44; // Notch cutout half-width
+  const depth = 34; // Deep U-notch cutout
 
   const d = `
     M 0,20
     Q 0,0 20,0
     L ${c - r},0
-    C ${c - r + 22},0 ${c - 24},${depth} ${c},${depth}
-    C ${c + 24},${depth} ${c + r - 22},0 ${c + r},0
+    C ${c - r + 18},0 ${c - 20},${depth} ${c},${depth}
+    C ${c + 20},${depth} ${c + r - 18},0 ${c + r},0
     L ${width - 20},0
-    Q ${width},0 ${width},20
+    Q ${width},0 ${width},16
     L ${width},${height}
     L 0,${height}
     Z
@@ -111,7 +111,7 @@ function VaultTabBar({ state, navigation }: BottomTabBarProps) {
                 activeOpacity={0.88}>
                 <View style={styles.uploadFab}>
                   <GradientSurface colors={['#7f53ff', '#5a38ff', '#3d25e6']} />
-                  <VaultIcon name="plus" size={28} color="white" />
+                  <VaultIcon name="plus" size={26} color="white" />
                 </View>
               </TouchableOpacity>
             );
@@ -222,13 +222,13 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   uploadFab: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: -28,
+    marginTop: -22,
     shadowColor: '#5331f2',
     shadowOffset: { width: 0, height: 6 },
     shadowOpacity: 0.38,

@@ -130,7 +130,7 @@ export const HomeScreen: React.FC<Props> = ({ navigation }) => {
       <ScrollView
         style={{ marginTop: insets.top }}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={[s.scroll, { paddingTop: 8 }]}
+        contentContainerStyle={[s.scroll, { paddingTop: 8, paddingBottom: 100 }]}
         refreshControl={
           <RefreshControl
             refreshing={isLoading}

@@ -15,7 +15,8 @@ import tw from 'twrnc';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../types/navigation';
 import { useAuthStore } from '../store/useAuthStore';
-import { VaultLogo } from '../components/VaultLogo';
+import { GradientSurface, VaultFolder, VaultIcon } from '../components/DashboardArtwork';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 type Props = NativeStackScreenProps<AuthStackParamList, 'Register'>;
 
@@ -40,6 +41,7 @@ const currentYear = new Date().getFullYear();
 const YEARS = Array.from({ length: 80 }, (_, i) => currentYear - 10 - i);
 
 export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
+  const insets = useSafeAreaInsets();
   const [fullName, setFullName] = useState('');
 
   // Date of Birth Select State
@@ -139,9 +141,16 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={tw`flex-1 bg-[#FAF2F8]/20`}>
+      style={tw`flex-1 bg-[#fafbff]`}>
+      {/* Soft full-screen identity background, matching the registration reference. */}
+      <View pointerEvents="none" style={tw`absolute inset-0`}>
+        <GradientSurface colors={['#ECE9FF', '#FFFFFF', '#E6F4FF']} />
+      </View>
+      <View style={[tw`absolute top-0 left-0 right-0 opacity-80`, { height: insets.top + 250 }]}>
+        <GradientSurface colors={['#C8BEFF', '#EAE6FF', '#DDF7FF']} />
+      </View>
       <ScrollView
-        contentContainerStyle={tw`p-6 pt-10 justify-center flex-grow`}
+        contentContainerStyle={[tw`px-5 pb-10 flex-grow`, { paddingTop: insets.top + 14 }]}
         keyboardShouldPersistTaps="handled">
         {/* Top Back Button */}
         <View style={tw`flex-row justify-between items-center mb-5`}>
@@ -153,16 +162,39 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
           </TouchableOpacity>
         </View>
 
-        {/* Header */}
-        <View style={tw`items-center mb-6`}>
-          <VaultLogo size="lg" subtitle="Create Account" />
-          <Text style={tw`text-xs text-slate-500 text-center mt-2.5 leading-4 px-4`}>
-            Register your official details to issue your Sovereign Digital Document ID.
+        {/* Shared dashboard-style identity header */}
+        <View style={tw`bg-[#fafbfff5] rounded-t-3xl px-4 pt-5 pb-4 border border-white/70 overflow-hidden`}>
+          <View style={tw`flex-row items-center mb-5`}>
+            <View style={tw`w-13 h-13 rounded-2xl overflow-hidden items-center justify-center shadow-sm`}>
+              <GradientSurface />
+              <VaultIcon name="shield" color="white" size={27} />
+            </View>
+            <View style={tw`flex-1 ml-3`}>
+              <Text style={tw`text-xl font-black tracking-wide text-slate-900`}>VAULT / ID</Text>
+              <Text style={tw`text-[11px] font-bold text-slate-500 mt-0.5`}>Digital Document Vault</Text>
+            </View>
+            <View style={tw`w-10 h-10 rounded-full bg-white border border-indigo-100 items-center justify-center`}>
+              <VaultIcon name="id" color="#6342ff" size={21} />
+            </View>
+          </View>
+          <View pointerEvents="none" style={tw`absolute right-[-26px] top-16 opacity-80`}>
+            <VaultFolder width={142} height={112} />
+          </View>
+          <Text style={tw`text-[10px] font-black tracking-widest text-blue-700 mb-1`}>DIGITAL IDENTITY</Text>
+          <Text style={tw`text-[30px] leading-9 font-black text-slate-900`}>Create your account</Text>
+          <Text style={tw`text-base text-slate-500 mt-2 leading-5 pr-6`}>
+            Register your details to issue your secure digital document ID.
           </Text>
+          <View style={tw`flex-row gap-2 mt-4`}>
+            <View style={tw`w-10 h-2 rounded-full bg-indigo-600`} />
+            <View style={tw`w-10 h-2 rounded-full bg-indigo-200`} />
+            <View style={tw`w-10 h-2 rounded-full bg-indigo-200`} />
+            <View style={tw`w-10 h-2 rounded-full bg-indigo-200`} />
+          </View>
         </View>
 
         {/* Form Container Card */}
-        <View style={tw`bg-white rounded-3xl p-5 border border-slate-100 shadow-xl space-y-3.5`}>
+        <View style={tw`bg-white rounded-b-3xl rounded-tl-xl rounded-tr-xl p-5 border border-slate-200 shadow-sm space-y-3.5`}>
           {activeError && (
             <View style={tw`bg-red-50 border border-red-200 rounded-xl p-3 mb-2`}>
               <Text style={tw`text-xs font-bold text-red-600 text-center leading-4`}>{activeError}</Text>
@@ -413,7 +445,7 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
 
           {/* Submit Button */}
           <TouchableOpacity
-            style={tw`bg-indigo-600 rounded-2xl h-13 justify-center items-center mt-5 shadow-lg shadow-indigo-600/30 flex-row gap-2 ${
+            style={tw`bg-indigo-600 rounded-2xl h-13 justify-center items-center mt-5 shadow-lg shadow-indigo-600/30 flex-row gap-2 overflow-hidden ${
               isLoading ? 'opacity-60' : ''
             }`}
             onPress={handleRegister}
@@ -423,6 +455,7 @@ export const RegisterScreen: React.FC<Props> = ({ navigation }) => {
               <ActivityIndicator color="#FFFFFF" />
             ) : (
               <>
+                <GradientSurface />
                 <Text style={tw`text-white font-black text-base`}>Create Account</Text>
                 <Text style={tw`text-white font-bold text-base`}>→</Text>
               </>

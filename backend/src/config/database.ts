@@ -98,6 +98,9 @@ export const connectDatabase = async (): Promise<void> => {
   } catch (error: any) {
     console.warn(`⚠️ Could not connect to MongoDB at ${mongoUri}: ${error.message}`);
     console.warn('ℹ️ Falling back to in-memory store for local testing.');
+    if (process.env.NODE_ENV === 'production') {
+      throw new Error('MongoDB is required in production. Set MONGODB_URI to the shared database connection string.');
+    }
     await seedInitialAdmin();
   }
 };

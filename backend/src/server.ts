@@ -68,11 +68,6 @@ app.get('/health', (_req, res) => {
 app.use('/api/v1', apiRoutes);
 app.use('/api', apiRoutes);
 
-// Start HTTP server before connecting to MongoDB so health checks remain available.
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server running on port ${PORT}`);
-});
-
 async function seedAdmin() {
   const adminEmail = process.env.ADMIN_EMAIL || 'admin@vault.gov.in';
   const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
@@ -104,12 +99,21 @@ async function seedAdmin() {
   }
 }
 
-connectDatabase().then(async () => {
-  console.log('MongoDB connected');
-  await seedAdmin();
-}).catch((error) => {
-  console.error('MongoDB connection failed:', error);
-});
+async function startServer() {
+  try {
+    await connectDatabase();
+    console.log('MongoDB connected');
+    await seedAdmin();
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error('MongoDB connection failed; server will not start:', error);
+    process.exit(1);
+  }
+}
+
+void startServer();
 /*
   app.listen(PORT, "0.0.0.0", () => {
     console.log(`====================================================`);

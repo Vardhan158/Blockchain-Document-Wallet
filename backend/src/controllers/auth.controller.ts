@@ -89,6 +89,26 @@ export const register = async (req: Request, res: Response) => {
 
     const existingUser = await dbService.getUserByEmail(email);
     if (existingUser) {
+      // A prior request may have reached the server but the client timed out
+      // while waiting on email delivery. Let that unverified account resume
+      // OTP verification instead of blocking the user with a duplicate-email
+      // error.
+      if (!existingUser.isVerified) {
+        const otp = generate4DigitOtp();
+        existingUser.otp = otp;
+        existingUser.otpExpiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+        await dbService.saveUser(existingUser);
+        void emailService.sendOtpEmail(existingUser.email, otp).catch(emailError => {
+          console.error(`Unable to deliver retry OTP to ${existingUser.email}:`, emailError);
+        });
+        return res.status(200).json({
+          message: `Continue verification for ${existingUser.email}.`,
+          requiresVerification: true,
+          email: existingUser.email,
+          otpDemo: otp,
+          emailDelivery: 'queued',
+        });
+      }
       return res.status(400).json({ message: 'An account with this email already exists' });
     }
 
@@ -118,16 +138,19 @@ export const register = async (req: Request, res: Response) => {
 
     await dbService.createUser(newUser);
 
-    // Dispatch real-time OTP email to user's registered address
-    const emailResult = await emailService.sendOtpEmail(newUser.email, otp);
+    // Do not make account creation wait for an external email provider. A slow
+    // SMTP/Brevo connection previously let the mobile client's request time out
+    // even though the user record had already been created.
+    void emailService.sendOtpEmail(newUser.email, otp).catch(emailError => {
+      console.error(`Unable to deliver registration OTP to ${newUser.email}:`, emailError);
+    });
 
     return res.status(201).json({
       message: `Registration successful! 4-digit OTP sent to ${newUser.email}.`,
       requiresVerification: true,
       email: newUser.email,
       otpDemo: otp,
-      emailSent: emailResult.sent,
-      emailPreviewUrl: emailResult.previewUrl,
+      emailDelivery: 'queued',
     });
   } catch (error: any) {
     return res.status(500).json({ message: 'Error registering user', error: error.message });

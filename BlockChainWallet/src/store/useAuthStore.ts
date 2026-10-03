@@ -137,7 +137,10 @@ export const useAuthStore = create<AuthState>((set, _get) => ({
         otpDemo: response.data.otpDemo,
       };
     } catch (err: any) {
-      const msg = err.response?.data?.message || 'Failed to register. Please try again.';
+      const msg = err.response?.data?.message ||
+        (err.code === 'ECONNABORTED'
+          ? 'Registration is taking longer than expected. Please check your email before trying again.'
+          : 'Unable to reach the registration service. Please check your internet connection and try again.');
       set({ error: msg, isLoading: false });
       return { success: false };
     }

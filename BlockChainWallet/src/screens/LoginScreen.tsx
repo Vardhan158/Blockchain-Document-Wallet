@@ -15,6 +15,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { AuthStackParamList } from '../types/navigation';
 import { useAuthStore } from '../store/useAuthStore';
+import { tokenStorage } from '../services/tokenStorage';
 import { GradientSurface, VaultIcon } from '../components/DashboardArtwork';
 import { User } from '../types/models';
 
@@ -25,18 +26,25 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [savedUser, setSavedUser] = useState<User | null>(null);
+  const [isCheckingSavedUser, setIsCheckingSavedUser] = useState(true);
 
   const { login, initAuth, isLoading, error, clearError } = useAuthStore();
 
   useEffect(() => {
     AsyncStorage.getItem('auth_user').then(value => {
       if (value) setSavedUser(JSON.parse(value));
-    }).catch(() => {});
+    }).catch(() => {}).finally(() => setIsCheckingSavedUser(false));
   }, []);
 
   const handleBiometricUnlock = async () => {
     const unlocked = await initAuth();
-    if (!unlocked) Alert.alert('Unlock not completed', 'Use your password below to sign in.');
+    if (!unlocked) Alert.alert('Unlock not completed', 'Try your fingerprint again, or choose a different account.');
+  };
+
+  const handleUseAnotherAccount = async () => {
+    await tokenStorage.clearTokens();
+    clearError();
+    setSavedUser(null);
   };
 
   const handleLogin = async () => {
@@ -52,6 +60,66 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
       navigation.navigate('OtpVerification', { email: result.email });
     }
   };
+
+  // Once a wallet has registered on this phone, its login page is intentionally
+  // biometric-only. The email/password form is only shown when no local wallet
+  // is enrolled, or after the user explicitly chooses a different account.
+  if (isCheckingSavedUser) {
+    return (
+      <View style={[styles.screen, styles.loadingScreen]}>
+        <ActivityIndicator color="#6542ff" />
+      </View>
+    );
+  }
+
+  if (savedUser) {
+    return (
+      <View style={styles.screen}>
+        <View style={styles.dashboardGlow}>
+          <GradientSurface colors={['#b7a3ff', '#c4d2ff', '#d9fbff']} />
+        </View>
+        <View style={[styles.content, styles.biometricOnlyContent]}>
+          <View style={styles.dashboardHeader}>
+            <View style={styles.logo}>
+              <GradientSurface colors={['#6e40ff', '#4a35d9', '#3349dc']} />
+              <VaultIcon name="shield" color="white" size={32} />
+            </View>
+            <View style={styles.dashboardBrand}>
+              <Text style={styles.brand}>VAULT / ID</Text>
+              <Text style={styles.subtitle}>Digital Document Vault</Text>
+            </View>
+            <View style={styles.loginAvatar}>
+              <Text style={styles.loginAvatarText}>{savedUser.fullName.charAt(0).toUpperCase()}</Text>
+            </View>
+          </View>
+
+          <View style={styles.biometricOnlyBody}>
+            <Text style={styles.dashboardEyebrow}>SECURE WALLET ACCESS</Text>
+            <Text style={styles.welcomeHeading}>Welcome back, {savedUser.fullName.split(' ')[0]}</Text>
+            <Text style={styles.intro}>Use your fingerprint to open your dashboard.</Text>
+
+            <TouchableOpacity
+              accessibilityRole="button"
+              accessibilityLabel="Unlock dashboard with fingerprint"
+              disabled={isLoading}
+              style={[styles.biometricCard, isLoading && styles.disabled]}
+              onPress={handleBiometricUnlock}>
+              <View style={styles.fingerprintCircle}><VaultIcon name="shield" color="#6542ff" size={32} /></View>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.biometricTitle}>{isLoading ? 'Authenticating…' : 'Unlock with Fingerprint'}</Text>
+                <Text style={styles.biometricSubtitle}>Your protected session will open the dashboard.</Text>
+              </View>
+              {isLoading ? <ActivityIndicator color="#6542ff" /> : <VaultIcon name="chevron" color="#6542ff" size={21} />}
+            </TouchableOpacity>
+
+            <TouchableOpacity accessibilityRole="button" onPress={handleUseAnotherAccount} style={styles.differentAccount}>
+              <Text style={styles.differentAccountText}>Use a different account</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
+    );
+  }
 
   return (
     <KeyboardAvoidingView
@@ -86,13 +154,13 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
             <Text style={styles.subtitle}>Digital Document Vault</Text>
           </View>
           <View style={styles.loginAvatar}>
-            <Text style={styles.loginAvatarText}>{savedUser?.fullName?.charAt(0).toUpperCase() || 'U'}</Text>
+            <Text style={styles.loginAvatarText}>U</Text>
           </View>
         </View>
 
         <View style={styles.dashboardHero}>
           <Text style={styles.dashboardEyebrow}>SECURE WALLET ACCESS</Text>
-          <Text style={styles.welcomeHeading}>Welcome back{savedUser ? `, ${savedUser.fullName.split(' ')[0]}` : ''}</Text>
+          <Text style={styles.welcomeHeading}>Welcome</Text>
           <Text style={styles.intro}>Unlock your digital identity and documents securely.</Text>
         </View>
 
@@ -101,8 +169,8 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
           <View style={styles.savedWalletIcon}><VaultIcon name="shield" color="#6d50ff" size={23} /></View>
           <View style={styles.savedWalletText}>
             <Text style={styles.savedWalletLabel}>SAVED WALLET</Text>
-            <Text numberOfLines={1} style={styles.savedWalletName}>{savedUser?.fullName || 'Your secure session'}</Text>
-            <Text numberOfLines={1} style={styles.savedWalletEmail}>{savedUser?.email || 'Sign in once to enable biometric unlock'}</Text>
+            <Text numberOfLines={1} style={styles.savedWalletName}>New or different account</Text>
+            <Text numberOfLines={1} style={styles.savedWalletEmail}>Sign in once to enable fingerprint unlock</Text>
           </View>
           <View style={styles.verifiedPill}><VaultIcon name="check" color="#55ffd5" size={14} /><Text style={styles.verifiedPillText}>SECURE</Text></View>
         </View>
@@ -237,7 +305,8 @@ function Field({
 }
 
 const styles = StyleSheet.create({
-  screen: { flex: 1, backgroundColor: '#FAF2F8' },
+  screen: { flex: 1, backgroundColor: '#FAFBFF' },
+  loadingScreen: { alignItems: 'center', justifyContent: 'center' },
   dashboardGlow: { position: 'absolute', top: 0, left: 0, right: 0, height: 270 },
   dashboardHeader: { flexDirection: 'row', alignItems: 'center', gap: 12, marginBottom: 18 },
   dashboardBrand: { flex: 1 },
@@ -262,6 +331,10 @@ const styles = StyleSheet.create({
   orText: { color: '#8490a7', fontSize: 9, fontWeight: '900', letterSpacing: 0.5 },
   glow: { position: 'absolute', top: 0, left: 0, right: 0, height: 220 },
   content: { padding: 22, paddingTop: 44, paddingBottom: 30 },
+  biometricOnlyContent: { flex: 1 },
+  biometricOnlyBody: { flex: 1, justifyContent: 'center' },
+  differentAccount: { alignSelf: 'center', paddingVertical: 20, paddingHorizontal: 12 },
+  differentAccountText: { color: '#6542ff', fontSize: 13, fontWeight: '800' },
   back: {
     width: 44,
     height: 44,

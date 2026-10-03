@@ -44,7 +44,7 @@ export const SplashScreen: React.FC<Props> = ({ navigation }) => {
       <View style={tw`items-center`}>
         <ActivityIndicator size="small" color="#818CF8" style={tw`mb-3`} />
         <Text style={tw`text-[10px] font-extrabold text-indigo-300 tracking-wider font-mono`}>
-          VERIFYING REAL-TIME AUTHENTICATION TOKEN...
+          UNLOCKING SECURE SESSION...
         </Text>
       </View>
 

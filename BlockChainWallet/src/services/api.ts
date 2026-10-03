@@ -6,7 +6,9 @@ export const API_BASE_URL = 'https://blockchain-document-wallet-32237917665.asia
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  timeout: 10000,
+  // Cloud Run may need a cold start; registration also triggers OTP delivery.
+  // Keep enough time for the API to respond while still failing predictably.
+  timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
   },

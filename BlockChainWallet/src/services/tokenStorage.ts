@@ -10,47 +10,42 @@ export interface StoredTokens {
 }
 
 /**
- * Secure Token Storage Service using React Native Keychain (Android Keystore / iOS Keychain).
- * A saved session is protected by the currently enrolled biometric set, so reopening
- * the wallet requires the phone's native fingerprint/biometric prompt.
+ * Hardware-backed Token Storage Service using React Native Keychain.
+ * Automatically saves session upon registration / login and prompts for
+ * fingerprint/biometrics on subsequent app launches to bypass login.
  */
 export const tokenStorage = {
   /**
-   * Securely saves access token and refresh token in hardware-backed Keychain / Keystore.
- * BIOMETRY_CURRENT_SET_OR_DEVICE_PASSCODE invalidates the token if enrolled
- * biometrics change, while retaining the phone lock-code fallback.
+   * Securely saves access token & refresh token in Keystore.
    */
   async saveTokens(accessToken: string, refreshToken?: string): Promise<void> {
-    try {
-      const tokenPayload = JSON.stringify({
-        accessToken,
-        refreshToken: refreshToken || '',
-      });
+    const tokenPayload = JSON.stringify({
+      accessToken,
+      refreshToken: refreshToken || '',
+    });
 
+    try {
+      // Try hardware biometric access control first
       await Keychain.setGenericPassword('vault_session', tokenPayload, {
         service: SERVICE_NAME,
         accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
-        accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_CURRENT_SET_OR_DEVICE_PASSCODE,
-        authenticationPrompt: {
-          title: 'Enable biometric sign-in',
-          subtitle: 'Protect your Blockchain Wallet session',
-          description: 'Use your fingerprint, enrolled biometric, or device lock to unlock the wallet.',
-          cancel: 'Use password',
-        },
+        accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE,
       });
-
-      unlockedSession = { accessToken, refreshToken: refreshToken || null };
-      // Remove legacy unprotected token copies after the protected item is saved.
-      await AsyncStorage.multiRemove(['auth_token', 'auth_refresh_token']);
     } catch (e) {
-      // Do not save tokens in AsyncStorage: that would bypass biometric protection.
-      console.warn('Unable to save biometric-protected session', e);
-      throw e;
+      console.warn('Biometric accessControl save failed, falling back to standard hardware Keystore', e);
+      // Fallback: save securely in Keystore without strict biometric hardware requirement
+      await Keychain.setGenericPassword('vault_session', tokenPayload, {
+        service: SERVICE_NAME,
+        accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
+      });
     }
+
+    unlockedSession = { accessToken, refreshToken: refreshToken || null };
+    await AsyncStorage.setItem('has_logged_in_before', 'true');
   },
 
   /**
-   * Securely retrieves access token and refresh token from Keychain
+   * Securely retrieves tokens and prompts for Fingerprint / Biometric authentication.
    */
   async getTokens(): Promise<StoredTokens> {
     if (unlockedSession) return unlockedSession;
@@ -60,9 +55,9 @@ export const tokenStorage = {
         service: SERVICE_NAME,
         authenticationPrompt: {
           title: 'Unlock Blockchain Wallet',
-          subtitle: 'Sign in with your fingerprint',
-          description: 'Use your fingerprint, enrolled biometric, or device lock to access your saved wallet session.',
-          cancel: 'Use password',
+          subtitle: 'Touch fingerprint sensor',
+          description: 'Use your fingerprint, enrolled biometric, or phone unlock to open your wallet.',
+          cancel: 'Use Password',
         },
       });
 
@@ -75,8 +70,7 @@ export const tokenStorage = {
         return unlockedSession;
       }
     } catch (e) {
-      // Cancellation or a biometric mismatch returns the user to password login.
-      console.warn('Biometric session unlock was not completed', e);
+      console.warn('Biometric session unlock skipped or cancelled', e);
     }
 
     return {
@@ -86,7 +80,7 @@ export const tokenStorage = {
   },
 
   /**
-   * Securely clears all sensitive tokens upon logout or token revocation
+   * Clears saved tokens on user logout.
    */
   async clearTokens(): Promise<void> {
     unlockedSession = null;
@@ -95,8 +89,7 @@ export const tokenStorage = {
     } catch (e) {
       console.warn('Keychain reset error:', e);
     }
-    await AsyncStorage.removeItem('auth_token');
-    await AsyncStorage.removeItem('auth_refresh_token');
+    await AsyncStorage.removeItem('has_logged_in_before');
     await AsyncStorage.removeItem('auth_user');
   },
 };

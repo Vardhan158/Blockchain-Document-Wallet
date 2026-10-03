@@ -86,21 +86,31 @@ export const seedInitialAdmin = async (): Promise<void> => {
 };
 
 export const connectDatabase = async (): Promise<void> => {
-  const mongoUri = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/blockchain_wallet';
+  const isCloudRun = Boolean(process.env.K_SERVICE);
+  const isProduction = process.env.NODE_ENV === 'production' || isCloudRun;
+  const mongoUri = process.env.MONGODB_URI?.trim();
+
+  if (!mongoUri && isProduction) {
+    throw new Error(
+      'MONGODB_URI is required in Cloud Run/production. Configure the shared MongoDB Atlas connection before starting the service.'
+    );
+  }
+
+  const connectionUri = mongoUri || 'mongodb://127.0.0.1:27017/blockchain_wallet';
 
   try {
     mongoose.set('strictQuery', false);
-    await mongoose.connect(mongoUri, {
+    await mongoose.connect(connectionUri, {
       serverSelectionTimeoutMS: 5000,
     });
-    console.log(`🍃 Connected to MongoDB successfully at: ${mongoUri}`);
+    console.log('🍃 Connected to MongoDB successfully.');
     await seedInitialAdmin();
   } catch (error: any) {
-    console.warn(`⚠️ Could not connect to MongoDB at ${mongoUri}: ${error.message}`);
-    console.warn('ℹ️ Falling back to in-memory store for local testing.');
-    if (process.env.NODE_ENV === 'production') {
-      throw new Error('MongoDB is required in production. Set MONGODB_URI to the shared database connection string.');
+    console.error(`⚠️ Could not connect to MongoDB: ${error.message}`);
+    if (isProduction) {
+      throw new Error('MongoDB connection is required in Cloud Run/production. Verify MONGODB_URI and MongoDB Atlas network access.');
     }
+    console.warn('ℹ️ Falling back to in-memory store for local development only.');
     await seedInitialAdmin();
   }
 };

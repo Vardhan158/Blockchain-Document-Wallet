@@ -38,7 +38,12 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
   const handleBiometricUnlock = async () => {
     const unlocked = await initAuth();
-    if (!unlocked) Alert.alert('Unlock not completed', 'Try your fingerprint again, or choose a different account.');
+    if (!unlocked) {
+      Alert.alert(
+        'Fingerprint Unlock Unavailable',
+        'No saved biometric session found. Please sign in with your Email and Password below to enable fingerprint unlock.',
+      );
+    }
   };
 
   const handleUseAnotherAccount = async () => {

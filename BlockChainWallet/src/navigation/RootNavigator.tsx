@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import { RootStackParamList } from '../types/navigation';
@@ -15,9 +15,20 @@ const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const RootNavigator: React.FC = () => {
   const token = useAuthStore(state => state.token);
+  const hasAuthenticatedInThisSession = useRef(false);
 
   useEffect(() => {
-    if (token) openPendingNotificationDestination();
+    if (token) {
+      hasAuthenticatedInThisSession.current = true;
+      openPendingNotificationDestination();
+      return;
+    }
+
+    // Keep Splash in charge of the first route, but send an already-open
+    // wallet back to Sign In when the user explicitly signs out.
+    if (hasAuthenticatedInThisSession.current && navigationRef.isReady()) {
+      navigationRef.reset({ index: 0, routes: [{ name: 'Auth' }] });
+    }
   }, [token]);
 
   return (
@@ -28,23 +39,21 @@ export const RootNavigator: React.FC = () => {
           contentStyle: { backgroundColor: VaultTheme.colors.background },
         }}>
         <Stack.Screen name="Splash" component={SplashScreen} />
-        {token ? (
-          <>
-            <Stack.Screen name="Main" component={MainTabNavigator} />
-            <Stack.Screen
-              name="DocumentDetails"
-              component={DocumentDetailsScreen}
-              options={{ animation: 'slide_from_right' }}
-            />
-            <Stack.Screen
-              name="UserId"
-              component={UserIdScreen}
-              options={{ animation: 'slide_from_bottom' }}
-            />
-          </>
-        ) : (
-          <Stack.Screen name="Auth" component={AuthNavigator} />
-        )}
+        {/* These routes must always be registered. Splash authenticates first
+            and then replaces itself with one of them. Conditional route
+            registration can make `replace('Main')` run before Main exists. */}
+        <Stack.Screen name="Auth" component={AuthNavigator} />
+        <Stack.Screen name="Main" component={MainTabNavigator} />
+        <Stack.Screen
+          name="DocumentDetails"
+          component={DocumentDetailsScreen}
+          options={{ animation: 'slide_from_right' }}
+        />
+        <Stack.Screen
+          name="UserId"
+          component={UserIdScreen}
+          options={{ animation: 'slide_from_bottom' }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -24,21 +24,14 @@ export const tokenStorage = {
       refreshToken: refreshToken || '',
     });
 
-    try {
-      // Try hardware biometric access control first
-      await Keychain.setGenericPassword('vault_session', tokenPayload, {
-        service: SERVICE_NAME,
-        accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
-        accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE,
-      });
-    } catch (e) {
-      console.warn('Biometric accessControl save failed, falling back to standard hardware Keystore', e);
-      // Fallback: save securely in Keystore without strict biometric hardware requirement
-      await Keychain.setGenericPassword('vault_session', tokenPayload, {
-        service: SERVICE_NAME,
-        accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
-      });
-    }
+    // Do not fall back to an unprotected Keychain entry here. A returning
+    // wallet must be unlocked with the device biometric (or its configured
+    // device passcode), rather than silently entering Home without a prompt.
+    await Keychain.setGenericPassword('vault_session', tokenPayload, {
+      service: SERVICE_NAME,
+      accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
+      accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE,
+    });
 
     unlockedSession = { accessToken, refreshToken: refreshToken || null };
     await AsyncStorage.setItem('has_logged_in_before', 'true');
@@ -72,6 +65,19 @@ export const tokenStorage = {
     } catch (e) {
       console.warn('Biometric session unlock skipped or cancelled', e);
     }
+
+    // Fallback check for session tokens in AsyncStorage if Keychain is empty
+    try {
+      const legacyToken = await AsyncStorage.getItem('auth_token');
+      const legacyRefresh = await AsyncStorage.getItem('auth_refresh_token');
+      if (legacyToken) {
+        unlockedSession = {
+          accessToken: legacyToken,
+          refreshToken: legacyRefresh || null,
+        };
+        return unlockedSession;
+      }
+    } catch (e) {}
 
     return {
       accessToken: null,

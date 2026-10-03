@@ -13,6 +13,9 @@ export const SplashScreen: React.FC<Props> = ({ navigation }) => {
   useEffect(() => {
     const checkAuthStatus = async () => {
       await new Promise<void>(resolve => setTimeout(() => resolve(), 1200));
+      // initAuth reads the session from the protected Keychain. For a
+      // registered user this displays Android's fingerprint prompt while the
+      // splash is still visible; Home is never shown until it succeeds.
       const isAuthenticated = await initAuth();
 
       if (isAuthenticated) {

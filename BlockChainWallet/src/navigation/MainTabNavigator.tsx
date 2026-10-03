@@ -40,15 +40,15 @@ const labels: Record<string, string> = {
 
 function CurvedTabBarBackground({ height, width }: { height: number; width: number }) {
   const c = width / 2;
-  const r = 40; // Curve cutout half-width
-  const depth = 28; // Concave dip depth
-  const cr = 28; // Pill outer corner radius
+  const r = 66; // Curve cutout half-width
+  const depth = 45; // Concave dip depth
+  const cr = 42; // Pill outer corner radius
 
   const d = `
     M ${cr},0
     L ${c - r},0
-    C ${c - r + 18},0 ${c - 20},${depth} ${c},${depth}
-    C ${c + 20},${depth} ${c + r - 18},0 ${c + r},0
+    C ${c - r + 25},0 ${c - 30},${depth} ${c},${depth}
+    C ${c + 30},${depth} ${c + r - 25},0 ${c + r},0
     L ${width - cr},0
     Q ${width},0 ${width},${cr}
     L ${width},${height - cr}
@@ -66,8 +66,8 @@ function CurvedTabBarBackground({ height, width }: { height: number; width: numb
         <Path
           d={d}
           fill="#ffffff"
-          stroke="#dbe3f7"
-          strokeWidth={1.5}
+          stroke="#d2d9ee"
+          strokeWidth={2}
         />
       </Svg>
     </View>
@@ -79,11 +79,12 @@ function VaultTabBar({ state, navigation }: BottomTabBarProps) {
   const { width } = useWindowDimensions();
 
   const pillWidth = width - 32; // 16px margin on left and right
-  const pillHeight = 64;
-  const bottomMargin = Math.max(insets.bottom, 12);
+  const pillHeight = 72;
+  const bottomMargin = Math.max(insets.bottom, 14);
+  const fabClearance = 30;
 
   return (
-    <View style={[styles.outerContainer, { bottom: bottomMargin, paddingHorizontal: 16 }]}>
+    <View style={[styles.outerContainer, { height: pillHeight + bottomMargin + fabClearance, paddingTop: fabClearance, paddingBottom: bottomMargin, paddingHorizontal: 16 }]}>
       <View style={[styles.pillContainer, { width: pillWidth, height: pillHeight }]}>
         <CurvedTabBarBackground width={pillWidth} height={pillHeight} />
 
@@ -119,7 +120,7 @@ function VaultTabBar({ state, navigation }: BottomTabBarProps) {
                   activeOpacity={0.88}>
                   <View style={styles.uploadFab}>
                     <GradientSurface colors={['#7f53ff', '#5a38ff', '#3d25e6']} />
-                    <VaultIcon name="plus" size={26} color="white" />
+                    <VaultIcon name="plus" size={32} color="white" />
                   </View>
                 </TouchableOpacity>
               );
@@ -137,8 +138,8 @@ function VaultTabBar({ state, navigation }: BottomTabBarProps) {
                 <View style={styles.iconContainer}>
                   <VaultIcon
                     name={icons[route.name]}
-                    size={22}
-                    color={focused ? '#6242ff' : '#858da7'}
+                    size={26}
+                    color={focused ? '#542cff' : '#7d89aa'}
                   />
                 </View>
                 <Text style={[styles.label, focused && styles.activeLabel]}>
@@ -170,9 +171,6 @@ export const MainTabNavigator: React.FC = () => (
 
 const styles = StyleSheet.create({
   outerContainer: {
-    position: 'absolute',
-    left: 0,
-    right: 0,
     alignItems: 'center',
     backgroundColor: 'transparent',
   },
@@ -187,10 +185,10 @@ const styles = StyleSheet.create({
     bottom: 0,
     top: 0,
     shadowColor: '#3d447a',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.12,
-    shadowRadius: 16,
-    elevation: 10,
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.14,
+    shadowRadius: 18,
+    elevation: 12,
   },
   tabRow: {
     flexDirection: 'row',
@@ -201,28 +199,28 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 2,
+    paddingTop: 7,
   },
   iconContainer: {
-    height: 24,
+    height: 28,
     justifyContent: 'center',
     alignItems: 'center',
   },
   label: {
-    fontSize: 10,
-    fontWeight: '600',
-    color: '#858da7',
-    marginTop: 2,
+    fontSize: 12,
+    fontWeight: '700',
+    color: '#7d89aa',
+    marginTop: 3,
   },
   activeLabel: {
-    color: '#6242ff',
-    fontWeight: '800',
+    color: '#542cff',
+    fontWeight: '900',
   },
   dot: {
-    width: 4,
-    height: 4,
-    borderRadius: 2,
-    marginTop: 2,
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    marginTop: 3,
     backgroundColor: 'transparent',
   },
   activeDot: {
@@ -235,19 +233,19 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   uploadFab: {
-    width: 54,
-    height: 54,
-    borderRadius: 27,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
     overflow: 'hidden',
     alignItems: 'center',
     justifyContent: 'center',
-    marginTop: -22,
+    marginTop: -31,
     shadowColor: '#5331f2',
-    shadowOffset: { width: 0, height: 6 },
-    shadowOpacity: 0.38,
-    shadowRadius: 10,
-    elevation: 8,
-    borderWidth: 3,
+    shadowOffset: { width: 0, height: 9 },
+    shadowOpacity: 0.42,
+    shadowRadius: 14,
+    elevation: 11,
+    borderWidth: 4,
     borderColor: '#ffffff',
   },
 });

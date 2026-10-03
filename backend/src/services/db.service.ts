@@ -19,11 +19,19 @@ class DbService {
   public async createUser(user: User): Promise<User> {
     if (this.isMongoConnected()) {
       try {
-        await UserModel.findOneAndUpdate({ id: user.id }, user, { upsert: true, returnDocument: 'after' });
+        await UserModel.findOneAndUpdate(
+          { id: user.id },
+          user,
+          { upsert: true, returnDocument: 'after' }
+        );
+        return user;
       } catch (err) {
-        console.warn('Error saving user to MongoDB:', err);
+        console.error('Error saving user to MongoDB:', err);
+        throw err;
       }
     }
+
+    // In-memory storage is only a local-development fallback.
     this.inMemoryUsers.set(user.id, user);
     return user;
   }
@@ -33,16 +41,22 @@ class DbService {
   }
 
   public async getUserByEmail(email: string): Promise<User | undefined> {
+    const normalizedEmail = email.trim().toLowerCase();
+
     if (this.isMongoConnected()) {
       try {
-        const doc = await UserModel.findOne({ email: email.toLowerCase() }).lean();
-        if (doc) return doc as User;
+        // MongoDB is the source of truth whenever connected.
+        // Never fall back to stale in-memory data in this case.
+        const doc = await UserModel.findOne({ email: normalizedEmail }).lean();
+        return doc ? (doc as User) : undefined;
       } catch (err) {
-        console.warn('Error fetching user by email from MongoDB:', err);
+        console.error('Error fetching user by email from MongoDB:', err);
+        throw err;
       }
     }
+
     return Array.from(this.inMemoryUsers.values()).find(
-      u => u.email.toLowerCase() === email.toLowerCase()
+      u => u.email.toLowerCase() === normalizedEmail
     );
   }
 
@@ -50,11 +64,13 @@ class DbService {
     if (this.isMongoConnected()) {
       try {
         const doc = await UserModel.findOne({ id }).lean();
-        if (doc) return doc as User;
+        return doc ? (doc as User) : undefined;
       } catch (err) {
-        console.warn('Error fetching user by id from MongoDB:', err);
+        console.error('Error fetching user by id from MongoDB:', err);
+        throw err;
       }
     }
+
     return this.inMemoryUsers.get(id);
   }
 
@@ -62,11 +78,13 @@ class DbService {
     if (this.isMongoConnected()) {
       try {
         const doc = await UserModel.findOne({ userId: publicUserId }).lean();
-        if (doc) return doc as User;
+        return doc ? (doc as User) : undefined;
       } catch (err) {
-        console.warn('Error fetching user by public id from MongoDB:', err);
+        console.error('Error fetching user by public id from MongoDB:', err);
+        throw err;
       }
     }
+
     return Array.from(this.inMemoryUsers.values()).find(u => u.userId === publicUserId);
   }
 

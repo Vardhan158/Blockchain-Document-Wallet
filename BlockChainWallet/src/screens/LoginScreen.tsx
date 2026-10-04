@@ -38,7 +38,9 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
   const handleBiometricUnlock = async () => {
     const unlocked = await initAuth();
-    if (!unlocked) {
+    if (unlocked) {
+      navigation.getParent()?.navigate('Main');
+    } else {
       Alert.alert(
         'Fingerprint Unlock Unavailable',
         'No saved biometric session found. Please sign in with your Email and Password below to enable fingerprint unlock.',
@@ -61,7 +63,9 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
       return;
     }
     const result = await login(email.trim().toLowerCase(), password);
-    if (result.requiresVerification && result.email) {
+    if (result.success) {
+      navigation.getParent()?.navigate('Main');
+    } else if (result.requiresVerification && result.email) {
       navigation.navigate('OtpVerification', { email: result.email });
     }
   };

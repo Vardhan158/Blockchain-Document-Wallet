@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { RootStackParamList } from '../types/navigation';
 import { SplashScreen } from '../screens/SplashScreen';
 import { AuthNavigator } from './AuthNavigator';
-import { MainTabNavigator } from './MainTabNavigator';
+import { SecureMainNavigator } from './SecureMainNavigator';
 import { DocumentDetailsScreen } from '../screens/DocumentDetailsScreen';
 import { UserIdScreen } from '../screens/UserIdScreen';
 import { useAuthStore } from '../store/useAuthStore';
@@ -43,7 +43,7 @@ export const RootNavigator: React.FC = () => {
             and then replaces itself with one of them. Conditional route
             registration can make `replace('Main')` run before Main exists. */}
         <Stack.Screen name="Auth" component={AuthNavigator} />
-        <Stack.Screen name="Main" component={MainTabNavigator} />
+        <Stack.Screen name="Main" component={SecureMainNavigator} />
         <Stack.Screen
           name="DocumentDetails"
           component={DocumentDetailsScreen}

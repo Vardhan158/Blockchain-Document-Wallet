@@ -12,15 +12,15 @@ export const SplashScreen: React.FC<Props> = ({ navigation }) => {
 
   useEffect(() => {
     const checkAuthStatus = async () => {
-      await new Promise<void>(resolve => setTimeout(() => resolve(), 1200));
-      // initAuth reads the session from the protected Keychain. For a
-      // registered user this displays Android's fingerprint prompt while the
-      // splash is still visible; Home is never shown until it succeeds.
-      const isAuthenticated = await initAuth();
-
-      if (isAuthenticated) {
-        navigation.replace('Main');
-      } else {
+      try {
+        const isAuthenticated = await initAuth();
+        if (isAuthenticated) {
+          navigation.replace('Main');
+        } else {
+          navigation.replace('Auth');
+        }
+      } catch (error) {
+        console.warn('Unable to start secure session unlock:', error);
         navigation.replace('Auth');
       }
     };
@@ -43,7 +43,6 @@ export const SplashScreen: React.FC<Props> = ({ navigation }) => {
         </Text>
       </View>
 
-      {/* Loader */}
       <View style={tw`items-center`}>
         <ActivityIndicator size="small" color="#818CF8" style={tw`mb-3`} />
         <Text style={tw`text-[10px] font-extrabold text-indigo-300 tracking-wider font-mono`}>

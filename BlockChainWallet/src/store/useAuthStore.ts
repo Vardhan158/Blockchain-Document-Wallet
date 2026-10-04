@@ -39,7 +39,7 @@ export const useAuthStore = create<AuthState>((set, _get) => ({
   initAuth: async () => {
     set({ isLoading: true });
     try {
-      const { accessToken } = await tokenStorage.getTokens();
+      const { accessToken } = await tokenStorage.getTokens(true);
 
       if (accessToken) {
         // Validate token in real-time with backend
@@ -190,8 +190,20 @@ export const useAuthStore = create<AuthState>((set, _get) => ({
 
   logout: async () => {
     set({ isLoading: true });
-    await tokenStorage.clearTokens();
-    set({ user: null, token: null, isLoading: false });
+    try {
+      // Revoke the currently held refresh token when possible. A logout must
+      // remove the encrypted session as well as the in-memory app state.
+      const { refreshToken } = await tokenStorage.getTokens();
+      if (refreshToken) {
+        await api.post('/auth/logout', { refreshToken });
+      }
+    } catch (error) {
+      // Local credential removal is still required when the device is offline.
+      console.warn('Server logout could not be completed; clearing local session.', error);
+    } finally {
+      await tokenStorage.clearTokens();
+      set({ user: null, token: null, isLoading: false });
+    }
   },
 
   clearError: () => set({ error: null }),

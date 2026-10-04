@@ -46,11 +46,6 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
     const unlocked = await initAuth();
     if (unlocked) {
       navigation.getParent()?.navigate('Main');
-    } else {
-      Alert.alert(
-        'Fingerprint Unlock Unavailable',
-        'No saved biometric session found. Please sign in with your Email and Password below to enable fingerprint unlock.',
-      );
     }
   };
 

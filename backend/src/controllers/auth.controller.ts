@@ -8,12 +8,42 @@ import { User } from '../types';
 import { PoliceOfficerModel } from '../models/officer.model';
 import { UserModel } from '../models/user.model';
 import { auditService } from '../services/audit.service';
+import { RevokedRefreshTokenModel } from '../models/revoked-refresh-token.model';
 
 import crypto from 'crypto';
 import { createAdminSession } from '../services/admin-session.service';
 
 // In production this should be backed by a shared Redis/token store.
 const revokedRefreshTokens = new Set<string>();
+
+const refreshTokenHash = (token: string) => crypto.createHash('sha256').update(token).digest('hex');
+
+async function isRefreshTokenRevoked(token: string): Promise<boolean> {
+  if (revokedRefreshTokens.has(token)) return true;
+  try {
+    return Boolean(await RevokedRefreshTokenModel.exists({ tokenHash: refreshTokenHash(token) }));
+  } catch (error) {
+    // Preserve the existing in-memory behaviour if the database is temporarily
+    // unavailable; a healthy production MongoDB keeps revocations persistent.
+    console.warn('Unable to read persistent refresh-token revocation:', error);
+    return false;
+  }
+}
+
+async function revokeRefreshToken(token: string): Promise<void> {
+  revokedRefreshTokens.add(token);
+  try {
+    const decoded = jwt.decode(token) as jwt.JwtPayload | null;
+    const expiresAt = decoded?.exp ? new Date(decoded.exp * 1000) : new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+    await RevokedRefreshTokenModel.updateOne(
+      { tokenHash: refreshTokenHash(token) },
+      { $setOnInsert: { expiresAt } },
+      { upsert: true },
+    );
+  } catch (error) {
+    console.warn('Unable to persist refresh-token revocation:', error);
+  }
+}
 
 /**
  * Generates a unique, non-sequential, cryptographically random User ID
@@ -171,14 +201,24 @@ export const verifyOtp = async (req: Request, res: Response) => {
     }
 
     if (user.isVerified) {
-      const token = jwt.sign(
-        { id: user.id, userId: user.userId, email: user.email },
+      // Keep an already-verified account compatible with the standard mobile
+      // session contract. The app always expects a short-lived access token
+      // plus a refresh token so its secure biometric session can refresh.
+      const accessToken = jwt.sign(
+        { id: user.id, userId: user.userId, email: user.email, tokenType: 'access' },
         JWT_SECRET,
-        { expiresIn: '30d' }
+        { expiresIn: '15m' }
+      );
+      const refreshToken = jwt.sign(
+        { id: user.id, userId: user.userId, tokenType: 'refresh' },
+        JWT_SECRET,
+        { expiresIn: '7d' }
       );
       return res.json({
         message: 'Account is already active.',
-        token,
+        accessToken,
+        refreshToken,
+        token: accessToken,
         user: {
           id: user.id,
           userId: user.userId,
@@ -188,6 +228,10 @@ export const verifyOtp = async (req: Request, res: Response) => {
           isVerified: true,
         },
       });
+    }
+
+    if (user.otpExpiresAt && new Date(user.otpExpiresAt).getTime() <= Date.now()) {
+      return res.status(400).json({ message: 'This OTP has expired. Please request a new code.' });
     }
 
     if (user.otp !== otp.toString().trim()) {
@@ -376,12 +420,12 @@ export const refreshTokens = async (req: Request, res: Response) => {
     if (!token) {
       return res.status(400).json({ message: 'Refresh token is required.' });
     }
-    if (revokedRefreshTokens.has(token)) return res.status(401).json({ code: 'SESSION_EXPIRED', message: 'Session expired. Please sign in again.' });
+    if (await isRefreshTokenRevoked(token)) return res.status(401).json({ code: 'SESSION_EXPIRED', message: 'Session expired. Please sign in again.' });
 
     try {
       const decoded: any = jwt.verify(token, JWT_SECRET);
       if (decoded.tokenType !== 'refresh') return res.status(401).json({ message: 'Invalid refresh token.' });
-      revokedRefreshTokens.add(token); // rotate: a refresh token is single-use
+      await revokeRefreshToken(token); // rotate: a refresh token is single-use
 
       if (decoded.role === 'POLICE_OFFICER' || decoded.role === 'POLICE') {
         const officer = await PoliceOfficerModel.findOne({ id: decoded.id }).lean();
@@ -394,6 +438,9 @@ export const refreshTokens = async (req: Request, res: Response) => {
       const user = await dbService.getUserById(decoded.id);
       if (!user) {
         return res.status(401).json({ message: 'User not found.' });
+      }
+      if (user.accountStatus === 'SUSPENDED' || user.accountStatus === 'DEACTIVATED') {
+        return res.status(401).json({ code: 'SESSION_REVOKED', message: 'This account is no longer allowed to use an active session.' });
       }
 
       // Re-issue 15-minute Access Token & 7-day Refresh Token
@@ -697,7 +744,7 @@ export const logoutUser = async (req: Request, res: Response) => {
   try {
     const { refreshToken: token } = req.body;
     if (token) {
-      revokedRefreshTokens.add(token);
+      await revokeRefreshToken(token);
       console.log(`🔒 [AUTH REVOCATION] Refresh Token revoked successfully.`);
     }
     return res.json({ message: 'Logged out successfully and refresh tokens revoked.' });

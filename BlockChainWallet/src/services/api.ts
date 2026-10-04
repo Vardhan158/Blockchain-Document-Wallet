@@ -1,8 +1,12 @@
 import axios from 'axios';
+import { Platform } from 'react-native';
 import { tokenStorage } from './tokenStorage';
 
-// Default base URL configured for Cloud Run deployment
-export const API_BASE_URL = 'https://blockchain-document-wallet-32237917665.asia-south2.run.app/api';
+// Configured for local development on Android emulator (10.0.2.2:5000) & Cloud Run production
+const DEV_API_URL = Platform.OS === 'android' ? 'http://10.0.2.2:5000/api/v1' : 'http://localhost:5000/api/v1';
+const PROD_API_URL = 'https://blockchain-document-wallet-32237917665.asia-south2.run.app/api/v1';
+
+export const API_BASE_URL = __DEV__ ? DEV_API_URL : PROD_API_URL;
 
 const api = axios.create({
   baseURL: API_BASE_URL,

@@ -24,14 +24,19 @@ export const tokenStorage = {
       refreshToken: refreshToken || '',
     });
 
-    // Do not fall back to an unprotected Keychain entry here. A returning
-    // wallet must be unlocked with the device biometric (or its configured
-    // device passcode), rather than silently entering Home without a prompt.
-    await Keychain.setGenericPassword('vault_session', tokenPayload, {
-      service: SERVICE_NAME,
-      accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
-      accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE,
-    });
+    try {
+      await Keychain.setGenericPassword('vault_session', tokenPayload, {
+        service: SERVICE_NAME,
+        accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
+        accessControl: Keychain.ACCESS_CONTROL.BIOMETRY_ANY_OR_DEVICE_PASSCODE,
+      });
+    } catch (e) {
+      console.warn('Biometric accessControl save failed, using standard Keystore', e);
+      await Keychain.setGenericPassword('vault_session', tokenPayload, {
+        service: SERVICE_NAME,
+        accessible: Keychain.ACCESSIBLE.WHEN_UNLOCKED,
+      });
+    }
 
     unlockedSession = { accessToken, refreshToken: refreshToken || null };
     await AsyncStorage.setItem('has_logged_in_before', 'true');

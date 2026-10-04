@@ -32,7 +32,13 @@ export const LoginScreen: React.FC<Props> = ({ navigation }) => {
 
   useEffect(() => {
     AsyncStorage.getItem('auth_user').then(value => {
-      if (value) setSavedUser(JSON.parse(value));
+      if (value) {
+        setSavedUser(JSON.parse(value));
+        // Automatically pop up fingerprint prompt when returning user is detected!
+        setTimeout(() => {
+          handleBiometricUnlock();
+        }, 300);
+      }
     }).catch(() => {}).finally(() => setIsCheckingSavedUser(false));
   }, []);
 
